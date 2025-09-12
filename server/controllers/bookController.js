@@ -50,6 +50,7 @@ const addBook = asyncHandler(
             description: req.body.description,
             cover: req.body.cover,
             price: req.body.price,
+            image: req.body.image
         })
 
         const result = await book.save()
@@ -82,6 +83,7 @@ const editBook = asyncHandler(
                 description: req.body.description,
                 cover: req.body.cover,
                 price: req.body.price,
+                image: req.body.image
             }
         }, { new: true })
 

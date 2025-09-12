@@ -1,13 +1,13 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
+import Swal from 'sweetalert2';
 
 function ResetPasswordForm() {
     const { id, token } = useParams<{ id: string; token: string }>();
     const [password, setPassword] = useState<string>("");
     const [status, setStatus] = useState<"loading" | "valid" | "invalid">("loading");
     const navigate = useNavigate();
-
 
     useEffect(() => {
         const verifyLink = async () => {
@@ -23,34 +23,66 @@ function ResetPasswordForm() {
 
     const handlePasswordReset = async () => {
         try {
-            const res = await axios.post(
+            await axios.post(
                 `http://localhost:5000/api/password/reset-password/${id}/${token}`,
                 { password }
             );
-            console.log("form", res.data);
+
+            Swal.fire({
+                icon: "success",
+                text: "Your password has been reset successfully!",
+                confirmButtonText: "OK",
+            });
 
             navigate("/login");
         } catch (error: any) {
-            console.error(error.response?.data || error.message);
-            alert("Reset link is invalid or expired.");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error.response?.data?.message || "Reset link is invalid or expired.",
+                confirmButtonText: "OK",
+            });
         }
     };
-    if (status === "loading") return <p>Verifying link...</p>;
-    if (status === "invalid") return <p>❌ This reset link is invalid or has expired.</p>;
-    return (
-        <div className="flex flex-col">
-            <label htmlFor="password">Enter New Password</label>
-            <input
-                type="password"
-                id="password"
-                placeholder="New password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
 
-            <button onClick={handlePasswordReset}>Reset Password</button>
+    if (status === "loading")
+        return <p className="text-center text-[#a47148] font-bold">Verifying link...</p>;
+
+    if (status === "invalid")
+        return (
+            <p className="text-center text-red-500 font-bold">
+                ❌ This reset link is invalid or has expired.
+            </p>
+        );
+
+    return (
+        <div className="flex justify-center items-center h-screen">
+            <div className="flex flex-col gap-4 w-96 bg-[#3e2723] p-6 rounded-xl shadow-md">
+                <p className="font-bold text-center text-[#f5f5dc] text-lg">
+                    Reset Your Password
+                </p>
+
+                <label htmlFor="password" className="text-[#f5f5dc]">
+                    Enter New Password:
+                </label>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="New password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded"
+                />
+
+                <button
+                    onClick={handlePasswordReset}
+                    className="bg-[#a47148] text-[#f5f5dc] p-2 rounded hover:bg-[#8b5e3c] transition cursor-pointer"
+                >
+                    Reset Password
+                </button>
+            </div>
         </div>
     );
 }
 
-export default ResetPasswordForm
+export default ResetPasswordForm;

@@ -31,13 +31,17 @@ function Admin() {
     return (
         <>
             {!isAdmin ? (
-                <span>Not Authorized</span>
+                <span className="text-red-700 font-bold">Not Authorized</span>
             ) : (
-                <div className="flex gap-8">
+                <div className="flex h-screen bg-[#f5f5dc] w-full">
                     <SideBar setActiveTab={setActiveTab} />
-                    <div className="flex flex-col">
-                        <h1 className="mt-8 font-bold text-2xl">Admin Dashboard</h1>
-                        {renderContent()}
+                    <div className="flex flex-col flex-1 p-8">
+                        <h1 className="text-3xl font-bold text-[#3e2723] mb-6">
+                            Admin Dashboard
+                        </h1>
+                        <div className="bg-white rounded-xl shadow-md p-6 flex-1 overflow-auto">
+                            {renderContent()}
+                        </div>
                     </div>
                 </div>
             )}

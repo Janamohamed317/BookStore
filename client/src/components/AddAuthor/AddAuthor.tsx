@@ -1,32 +1,28 @@
 import axios from "axios"
-import { useContext, useState } from "react"
-import type { newAuthor } from "../../types/Author"
+import { useContext } from "react"
 import Swal from "sweetalert2"
 import type { ErrorResponse } from "../../types/Error"
 import { AppContext } from "../Context/AppContext"
+
 function AddAuthor() {
     const context = useContext(AppContext);
     if (!context) {
         throw new Error("Authors must be used within an AppContextProvider");
     }
-    const { getAuthors } = context;
+    const { getAuthors, setAuthorData, authorData } = context;
 
     const token = localStorage.getItem("token")
 
-    const [formData, setFormData] = useState<newAuthor>({
-        fullName: "",
-        nationality: "",
-    })
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
-        setFormData((prev) => ({ ...prev, [name]: value }))
+        setAuthorData((prev) => ({ ...prev, [name]: value }))
     }
 
     const handleSubmit = async () => {
         try {
-            const res = await axios.post("http://localhost:5000/api/authors/add", {
-                fullName: formData.fullName,
-                nationality: formData.nationality,
+            await axios.post("http://localhost:5000/api/authors/add", {
+                fullName: authorData.fullName,
+                nationality: authorData.nationality,
             }, {
                 headers: {
                     token: token
@@ -43,36 +39,43 @@ function AddAuthor() {
             }
         }
         finally {
+            setAuthorData({
+                fullName: "",
+                nationality: ""
+            })
             getAuthors()
         }
-
     }
 
     return (
-        <div className="flex justify-center items-center gap-2 mt-5">
-            <p className="font-bold">Add New Author</p>
+        <div className="flex justify-center items-center gap-3 mt-6 bg-[#3e2723]/90 p-4 rounded-lg shadow-md">
+            <p className="font-bold text-[#f5f5dc]">Add New Author</p>
+
             <input
                 type="text"
                 placeholder="Enter Author Name"
-                value={formData.fullName}
-                className="bg-amber-200 rounded-2xl p-2"
-                name="fullName" onChange={handleChange} />
+                value={authorData.fullName}
+                className="bg-[#f5f5dc] text-[#3e2723] rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#a47148] outline-none"
+                name="fullName"
+                onChange={handleChange}
+            />
 
             <input
                 type="text"
                 placeholder="Enter Author Nationality"
-                value={formData.nationality}
+                value={authorData.nationality}
                 name="nationality"
                 onChange={handleChange}
-                className="bg-amber-200 rounded-2xl p-2"
+                className="bg-[#f5f5dc] text-[#3e2723] rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#a47148] outline-none"
             />
 
             <button
                 onClick={handleSubmit}
-                className="bg-amber-950 p-2 rounded-2xl text-white">
+                className="bg-[#a47148] hover:bg-[#8b5e3c] px-4 py-2 rounded-lg text-[#f5f5dc] font-semibold transition"
+            >
                 Submit
             </button>
-        </div >
+        </div>
     )
 }
 

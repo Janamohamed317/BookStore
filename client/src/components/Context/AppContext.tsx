@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import axios from "axios";
-import type { Author } from "../../types/Author";
+import type { Author, newAuthor } from "../../types/Author";
 import type { Book, newBook } from "../../types/Book";
 
 
@@ -15,9 +15,8 @@ type AppContextType = {
     setBookData: React.Dispatch<React.SetStateAction<newBook>>;
     bookData: newBook
     getAuthorID: (firstName: string) => void
-    token: string
-    setToken: React.Dispatch<React.SetStateAction<string>>;
-    handleLogout: () => void
+    setAuthorData: React.Dispatch<React.SetStateAction<newAuthor>>
+    authorData: newAuthor
 };
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -29,7 +28,6 @@ type AppContextProviderProps = {
 const AppContextProvider = ({ children }: AppContextProviderProps) => {
     const [books, setBooks] = useState<Book[]>([]);
     const [authors, setAuthors] = useState<Author[]>([]);
-    const [token, setToken] = useState<string>("")
     const [bookData, setBookData] = useState<newBook>(
         {
             title: "",
@@ -37,14 +35,20 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
             description: "",
             cover: "",
             price: 0,
+            image: ""
         }
     )
 
+    const [authorData , setAuthorData] = useState<newAuthor>(
+        {
+            fullName: " ",
+            nationality: " "
+        }
+    )
 
     const getBooks = async () => {
         try {
             const res = await axios.get("http://localhost:5000/api/books")
-            // console.log(res.data);
             setBooks(res.data)
 
         } catch (error) {
@@ -55,7 +59,6 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
     const getAuthors = async () => {
         try {
             const res = await axios.get("http://localhost:5000/api/authors")
-            // console.log(res.data);
             setAuthors(res.data)
 
         } catch (error) {
@@ -78,10 +81,6 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
         }
     }
 
-    const handleLogout = () => {
-        localStorage.removeItem("token")
-
-    }
 
     useEffect(() => {
         getBooks();
@@ -98,9 +97,8 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
         setBookData,
         bookData,
         getAuthorID,
-        token,
-        setToken,
-        handleLogout,
+        authorData,
+        setAuthorData
     };
 
     return (

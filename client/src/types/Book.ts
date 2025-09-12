@@ -7,6 +7,7 @@ export interface Book {
     description: string,
     price: number,
     cover: string,
+    image: string
 }
 
 export interface newBook {
@@ -15,4 +16,5 @@ export interface newBook {
     description: string,
     cover: string,
     price: number,
+    image: string
 }
