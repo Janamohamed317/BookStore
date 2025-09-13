@@ -5,7 +5,7 @@ import type { ErrorResponse } from "../../types/Error"
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router';
 import { UploadImg } from '../../utils/UploadImg';
-import { resetBookData } from '../../utils/resetBookData';
+import { resetBookData } from '../../utils/ResetBookData';
 
 function AddBook() {
     const context = useContext(AppContext);
@@ -116,7 +116,7 @@ function AddBook() {
                     onChange={(e) => getAuthorID(e.target.value)}
                 >
                     <option value="">--Choose an author--</option>
-                    {authors.map((author) => (
+                    {authors?.map((author) => (
                         <option key={author._id} value={author.fullName}>
                             {author.fullName}
                         </option>

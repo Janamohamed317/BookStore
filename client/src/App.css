@@ -3,6 +3,8 @@
 
 #root {
   background-color: rgb(49, 36, 1);
+  min-height: 100vh;
+  height: auto;
   margin: 0;
   padding: 0;
 }

@@ -19,3 +19,9 @@ export interface resetPassword {
 export interface forgetPassword {
     email: string
 }
+
+export interface User  {
+    _id: string;
+    name: string;
+    email: string;
+};

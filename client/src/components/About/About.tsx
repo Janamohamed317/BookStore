@@ -1,7 +1,7 @@
 
 function About() {
     return (
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center mb-8   ">
             <div className=" text-[#f5f5dc] rounded-2xl p-8 max-w-6xl shadow-md">
                 <h1 className="text-3xl font-bold text-center mb-4">About Our Bookstore</h1>
                 <p className="mb-4">

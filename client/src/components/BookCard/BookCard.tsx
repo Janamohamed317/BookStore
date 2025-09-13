@@ -11,7 +11,7 @@ function BookCard({ book }: BookInfoProps) {
     const authorId = book.author._id
 
     const getAuthorName = async (authorId: String) => {
-        const res = await axios.get(`http://localhost:5000/api/authors/${book.author._id}`)
+        const res = await axios.get(`http://localhost:5000/api/authors/${authorId}`)
         setAuthorName(res.data.fullName)
     }
 

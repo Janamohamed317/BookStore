@@ -27,7 +27,7 @@ const bookSchema = new mongoose.Schema({
     {
         type: Number,
         required: true,
-        min: 0
+        min: 1
     },
     image:
     {
@@ -53,7 +53,7 @@ function ValidateBookCreation(obj) {
         title: Joi.string().trim().min(3).max(250).required(),
         author: Joi.string().required(),
         description: Joi.string().trim().required(),
-        price: Joi.number().min(0).required(),
+        price: Joi.number().min(1).required(),
         cover: Joi.string().valid("Soft Cover", "Hard Cover").required(),
     });
 
@@ -65,7 +65,7 @@ function ValidateUpdateBook(obj) {
         title: Joi.string().trim().min(3).max(250),
         author: Joi.string(),
         description: Joi.string().trim(),
-        price: Joi.number().min(0),
+        price: Joi.number().min(1),
         cover: Joi.string().valid("Soft Cover", "Hard Cover"),
     });
 

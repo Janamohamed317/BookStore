@@ -1,16 +1,20 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import { BrowserRouter } from "react-router";
-import AppContextProvider from './components/Context/AppContext.tsx';
-// import AppContextProvider from './components/Context/AppContext';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App.tsx";
+import { BrowserRouter } from "react-router-dom";
+import AppContextProvider from "./components/Context/AppContext.tsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-createRoot(document.getElementById('root')!).render(
+const queryClient = new QueryClient();
+
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      <AppContextProvider>
-        <App />
-      </AppContextProvider>
+      <QueryClientProvider client={queryClient}>   
+        <AppContextProvider>
+          <App />
+        </AppContextProvider>
+      </QueryClientProvider>
     </BrowserRouter>
-  </StrictMode>,
-)
+  </StrictMode>
+);

@@ -4,9 +4,7 @@ const mongoose = require("mongoose");
 
 const getAllAuthors = asyncHandler(
     async (req, res) => {
-        // const { pageNumber } = req.query
-        const authorList = await Author.find({isDeleted: false})
-        // const authorList = await Author.find().skip((pageNumber - 1) * authorsPerPage).limit(authorsPerPage);
+        const authorList = await Author.find({ isDeleted: false })
         res.status(200).json(authorList)
     }
 )
@@ -32,30 +30,34 @@ const getAuthorByNameOrID = asyncHandler(async (req, res) => {
 })
 
 
-const addAuthor = asyncHandler(
-    async (req, res) => {
-        const { error } = ValidateAddAuthor(req.body);
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message })
-        }
-
-        let author = await Author.findOne({ fullName: req.body.fullName })
-
-        if (author) {
-            return res.status(409).json({ message: "Author Already Exists" })
-        }
-
-        author = new Author(
-            {
-                fullName: req.body.fullName,
-                nationality: req.body.nationality,
-            }
-        )
-
-        const result = await author.save();
-        res.status(201).json(result);
+const addAuthor = asyncHandler(async (req, res) => {
+    const { error } = ValidateAddAuthor(req.body);
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
     }
-)
+
+    let author = await Author.findOne({ fullName: req.body.fullName });
+
+    if (author) {
+        if (author.isDeleted) {
+            author.isDeleted = false;
+            author.nationality = req.body.nationality; 
+            const result = await author.save();
+            return res.status(200).json(result);
+        }
+
+        return res.status(409).json({ message: "Author Already Exists" });
+    }
+
+    author = new Author({
+        fullName: req.body.fullName,
+        nationality: req.body.nationality,
+    });
+
+    const result = await author.save();
+    res.status(201).json(result);
+});
+
 
 
 const updateAuthor = asyncHandler(

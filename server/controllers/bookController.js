@@ -4,12 +4,12 @@ const { Book, ValidateBookCreation, ValidateUpdateBook } = require("../models/Bo
 
 const getAllBooks = asyncHandler(
     async (req, res) => {
-        const { maxPrice, minPrice } = req.query
+        const { pageNumber } = req.query
         let BookList
-        if (maxPrice && minPrice) {
-            BookList = await Book.find({ price: { $lt: maxPrice, $gt: minPrice } }).
+        const booksPerPage = 3
+        if (pageNumber) {
+            BookList = await Book.find().skip((pageNumber - 1) * booksPerPage).limit(booksPerPage).
                 populate("author", ['_id', "fullName"])
-
         }
         else {
             BookList = await Book.find().

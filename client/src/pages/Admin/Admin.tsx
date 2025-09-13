@@ -3,6 +3,7 @@ import Authors from "../Authors/Authors";
 import DeleteBook from "../../components/DeleteBook/DeleteBook";
 import { decodeToken } from "../../utils/DecodedToken";
 import SideBar from "../../components/SideBar/SideBar";
+import Users from "../Users/Users";
 
 function Admin() {
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -17,12 +18,12 @@ function Admin() {
 
     const renderContent = () => {
         switch (activeTab) {
-            case "authors":
+            case "Authors":
                 return <Authors />;
-            case "books":
+            case "Books":
                 return <DeleteBook />;
-            case "users":
-                return <div>Users management coming soon...</div>;
+            case "Users":
+                return <Users />
             default:
                 return <Authors />;
         }

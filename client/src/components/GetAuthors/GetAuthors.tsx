@@ -29,16 +29,16 @@ function GetAuthors() {
                     token: token
                 }
             })
+            await getAuthors()
+
         } catch (error) {
             console.log(error);
-        } finally {
-            getAuthors()
         }
     }
 
     return (
         <div className="mt-6 flex flex-col gap-3">
-            {authors.map((author) => (
+            {authors?.map((author) => (
                 <div
                     key={author._id}
                     className="flex justify-between items-center p-3 bg-[#f5f5dc] rounded-lg shadow-sm"

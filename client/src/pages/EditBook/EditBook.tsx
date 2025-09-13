@@ -157,7 +157,7 @@ function EditBook() {
                     value={bookData.author}
                 >
                     <option value="">--Choose an author--</option>
-                    {authors.map((author) => (
+                    {authors?.map((author) => (
                         <option key={author._id} value={author._id}>
                             {author.fullName}
                         </option>

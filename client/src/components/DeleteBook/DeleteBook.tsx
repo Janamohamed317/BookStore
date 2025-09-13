@@ -28,13 +28,15 @@ function DeleteBook() {
         getBooks()
     }, books)
 
-    const handleDeleteBook = (bookId: string) => {
+    const handleDeleteBook = async (bookId: string) => {
         try {
-            axios.delete(`http://localhost:5000/api/books/delete/${bookId}`, {
+            await axios.delete(`http://localhost:5000/api/books/delete/${bookId}`, {
                 headers: {
                     token: token
                 }
             })
+            await getBooks()
+
         } catch (error) {
             if (axios.isAxiosError<ErrorResponse>(error)) {
                 Swal.fire({
@@ -45,9 +47,7 @@ function DeleteBook() {
                 });
             }
         }
-        finally {
-            getBooks()
-        }
+
     }
 
     return (
@@ -59,7 +59,7 @@ function DeleteBook() {
                 Add new book
             </button>
 
-            {books.map((book) => (
+            {books?.map((book) => (
                 <div
                     className="flex justify-between gap-5 items-center mt-5 p-3 bg-white/70 rounded-lg shadow-sm"
                     key={book._id}
