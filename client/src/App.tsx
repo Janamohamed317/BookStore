@@ -12,6 +12,7 @@ import AddBook from './pages/AddBook/AddBook'
 import ResetPassword from './pages/ResetPassword/ResetPassword'
 import ResetPasswordForm from './pages/ResetPasswordForm/ResetPasswordForm'
 import EditAuthor from './pages/EditAuthor/EditAuthor'
+import ProtectedAdminRoute from './utils/ProtectedAdminRoute'
 
 function App() {
   return (
@@ -28,40 +29,16 @@ function App() {
           </ProtectedRoutes>
         } />
 
-        <Route path='/EditAuthor' element={
-          <ProtectedRoutes>
-            <EditAuthor />
-          </ProtectedRoutes>
-        } />
-
-        <Route path='/admin' element={
-          <ProtectedRoutes>
-            <Admin />
-          </ProtectedRoutes>
-        } />
-
-        <Route path='/authors' element={
-          <ProtectedRoutes>
-            <Authors />
-          </ProtectedRoutes>
-        } />
+        <Route path="/admin" element={<ProtectedAdminRoute />}>
+          <Route index element={<Admin />} />
+          <Route path="EditAuthor" element={<EditAuthor />} />
+          <Route path="addBook" element={<AddBook />} />
+          <Route path='EditBook' element={<EditBook />} />
+        </Route>
 
         <Route path='/books' element={
           <ProtectedRoutes>
             <DisplayBooks />
-          </ProtectedRoutes>
-        } />
-
-        <Route path='/EditBook' element={
-          <ProtectedRoutes>
-            <EditBook />
-          </ProtectedRoutes>
-        } />
-
-
-        <Route path='/addBook' element={
-          <ProtectedRoutes>
-            <AddBook />
           </ProtectedRoutes>
         } />
 

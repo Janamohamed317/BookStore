@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router";
-import { AppContext } from "../../components/Context/AppContext";
+import { AppContext } from "../Context/AppContext";
 import { useContext, useEffect } from "react";
 import axios from "axios";
 import type { Book } from "../../types/Book";
 import Swal from "sweetalert2";
 import type { ErrorResponse } from "../../types/Error";
 
-function DeleteBook() {
+function AdminBooks() {
     const context = useContext(AppContext);
     const navigate = useNavigate()
     if (!context) {
@@ -17,7 +17,7 @@ function DeleteBook() {
     const token = localStorage.getItem("token")
 
     const NavigateToEdit = (book: Book) => {
-        navigate('/EditBook', {
+        navigate('EditBook', {
             state: {
                 book: book,
             }
@@ -53,7 +53,7 @@ function DeleteBook() {
     return (
         <div className="mt-6 flex flex-col p-4 bg-[#f5f5dc] rounded-lg shadow-md">
             <button
-                onClick={() => navigate('/addBook')}
+                onClick={() => navigate('addBook')}
                 className="bg-[#f5f5dc] text-[#3e2723] border border-[#3e2723] px-4 py-2 rounded-lg self-end hover:bg-[#e6ddc4] transition"
             >
                 Add new book
@@ -89,4 +89,4 @@ function DeleteBook() {
     )
 }
 
-export default DeleteBook
+export default AdminBooks

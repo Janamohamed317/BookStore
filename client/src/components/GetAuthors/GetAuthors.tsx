@@ -13,7 +13,7 @@ function GetAuthors() {
     const { authors, getAuthors } = context;
 
     const NavigateToEditAuthor = (author: Author) => {
-        navigate('/EditAuthor', {
+        navigate('EditAuthor', {
             state: {
                 author: author,
             }

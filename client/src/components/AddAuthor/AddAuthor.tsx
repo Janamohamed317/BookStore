@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import Swal from "sweetalert2"
 import type { ErrorResponse } from "../../types/Error"
 import { AppContext } from "../Context/AppContext"
@@ -17,6 +17,13 @@ function AddAuthor() {
         const { name, value } = e.target
         setAuthorData((prev) => ({ ...prev, [name]: value }))
     }
+
+    useEffect(() => {
+        setAuthorData({
+            fullName: "",
+            nationality: "",
+        });
+    }, []);
 
     const handleSubmit = async () => {
         try {

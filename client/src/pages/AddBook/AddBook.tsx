@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../components/Context/AppContext';
 import axios from 'axios';
 import type { ErrorResponse } from "../../types/Error"
@@ -18,6 +18,19 @@ function AddBook() {
     const token = localStorage.getItem("token")
     const [file, setFile] = useState<File | null>(null);
 
+
+    useEffect(() => {
+        setBookData({
+            author: "",
+            title: "",
+            description: "",
+            cover: "",
+            price: 0,
+            image:""
+
+        });
+    }, []);
+
     const handleBookCreation = async () => {
         try {
             const res = await axios.post("http://localhost:5000/api/books/add", {
@@ -31,7 +44,8 @@ function AddBook() {
                     token: token
                 }
             })
-            await UploadImg(res.data._id, file)
+            
+            await UploadImg(res.data, file)
             navigate("/admin")
             resetBookData(setBookData)
             Swal.fire({

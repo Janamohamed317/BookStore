@@ -1,8 +1,11 @@
+import { useNavigate } from "react-router";
 import { handleLogout } from "../../utils/HandleLogout";
 
 
 
 export default function Navbar() {
+
+    const navigate = useNavigate()
     return (
         <nav className="bg-transparent border-gray-700">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -62,19 +65,14 @@ export default function Navbar() {
                                 About
                             </a>
                         </li>
-                        <li>
-                            <a
-                                className="block py-2 px-3 text-[#f5f5dc] rounded-sm 
-                                           hover:bg-[#5d4037] md:hover:bg-transparent 
-                                           md:border-0 md:hover:text-[#d7a86e] md:p-0"
-                            >
-                                Services
-                            </a>
-                        </li>
+
                         <li className="block py-2 px-3 text-[#f5f5dc] rounded-sm 
                                            hover:bg-[#5d4037] md:hover:bg-transparent 
-                                           md:border-0 md:hover:text-[#d7a86e] md:p-0"
-                            onClick={() => handleLogout()}>
+                                           md:border-0 md:hover:text-[#d7a86e] md:p-0 cursor-pointer"
+                            onClick={() => {
+                                handleLogout();
+                                navigate("/signin");
+                            }}>
                             Logout
                         </li>
                     </ul>

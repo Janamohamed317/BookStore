@@ -1,5 +1,4 @@
-import { useContext, useState } from "react";
-import { AppContext } from "../../components/Context/AppContext";
+import { useState } from "react";
 import BookCard from "../../components/BookCard/BookCard";
 import { pages } from "../../assets/assets";
 import type { Book } from "../../types/Book";
