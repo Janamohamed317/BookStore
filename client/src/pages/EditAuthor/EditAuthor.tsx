@@ -4,6 +4,7 @@ import { useContext, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import type { ErrorResponse } from "../../types/Error";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 function EditAuthor() {
     const context = useContext(AppContext);
@@ -17,6 +18,7 @@ function EditAuthor() {
     const { author } = location.state;
 
     const token = localStorage.getItem("token");
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         setAuthorData({
@@ -25,9 +27,9 @@ function EditAuthor() {
         });
     }, [author, setAuthorData]);
 
-    const handleEditAuthor = async () => {
-        try {
-            await axios.put(
+    const editAuthor = useMutation({
+        mutationFn: async () => {
+            const res = await axios.put(
                 `http://localhost:5000/api/authors/edit/${author._id}`,
                 {
                     fullName: authorData.fullName,
@@ -37,24 +39,28 @@ function EditAuthor() {
                     headers: { token },
                 }
             );
+            return res.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["authors"] }); 
             Swal.fire({
-                icon: 'success',
-                text: "Author is successfully Updated",
-                confirmButtonText: 'OK',
+                icon: "success",
+                text: "Author successfully updated",
+                confirmButtonText: "OK",
             });
-            getAuthors();
             navigate("/admin");
-        } catch (error) {
+        },
+        onError: (error) => {
             if (axios.isAxiosError<ErrorResponse>(error)) {
                 Swal.fire({
-                    icon: 'error',
-                    title: 'There is an error',
-                    text: error.response?.data.message || 'Network error',
-                    confirmButtonText: 'OK',
+                    icon: "error",
+                    title: "There is an error",
+                    text: error.response?.data.message || "Network error",
+                    confirmButtonText: "OK",
                 });
             }
-        }
-    };
+        },
+    });
 
     return (
         <div className="flex justify-center items-center h-screen">
@@ -92,7 +98,7 @@ function EditAuthor() {
                 />
 
                 <button
-                    onClick={handleEditAuthor}
+                    onClick={() => editAuthor.mutate()}
                     className="bg-[#a47148] text-[#f5f5dc] p-2 rounded hover:bg-[#8b5e3c] transition cursor-pointer"
                 >
                     Update Author

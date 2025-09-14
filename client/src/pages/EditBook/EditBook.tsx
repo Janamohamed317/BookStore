@@ -5,6 +5,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { UploadImg } from "../../utils/UploadImg";
 import { resetBookData } from "../../utils/ResetBookData";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { ErrorResponse } from "../../types/Error";
 
 function EditBook() {
     const context = useContext(AppContext);
@@ -12,26 +14,21 @@ function EditBook() {
     if (!context) {
         throw new Error("EditBook must be used within an AppContextProvider");
     }
+
     const { authors, getAuthorID, setBookData, bookData } = context;
     const location = useLocation();
     const { book } = location.state;
 
     const token = localStorage.getItem("token");
     const [file, setFile] = useState<File | null>(null);
+    const queryClient = useQueryClient();
 
     useEffect(() => {
-        setBookData({
-            title: book.title,
-            author: book.author._id,
-            description: book.description,
-            cover: book.cover,
-            price: book.price,
-            image: "",
-        });
+        resetBookData(setBookData)
     }, [book, setBookData]);
 
-    const handleEditBook = async () => {
-        try {
+    const editBook = useMutation({
+        mutationFn: async () => {
             await axios.put(
                 `http://localhost:5000/api/books/edit/${book._id}`,
                 {
@@ -45,9 +42,11 @@ function EditBook() {
             );
 
             await UploadImg(book, file);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["books"] });
 
             resetBookData(setBookData);
-
             Swal.fire({
                 icon: "success",
                 text: "Book is successfully updated",
@@ -55,14 +54,21 @@ function EditBook() {
             });
 
             navigate("/admin");
-        } catch (error: any) {
-            Swal.fire({
-                icon: "error",
-                title: "There was an error",
-                text: error.response?.data || error.message,
-                confirmButtonText: "OK",
-            });
-        }
+        },
+        onError: (error) => {
+            if (axios.isAxiosError<ErrorResponse>(error)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "There was an error",
+                    text: error.response?.data.message || "Network error",
+                    confirmButtonText: "OK",
+                });
+            }
+        },
+    });
+
+    const handleEditBook = () => {
+        editBook.mutate();
     };
 
     return (
@@ -178,9 +184,10 @@ function EditBook() {
 
                 <button
                     onClick={handleEditBook}
+                    disabled={editBook.isPending}
                     className="bg-[#a47148] text-[#f5f5dc] p-2 rounded hover:bg-[#8b5e3c] transition cursor-pointer"
                 >
-                    Update Book
+                    {editBook.isPending ? "Updating..." : "Update Book"}
                 </button>
             </div>
         </div>

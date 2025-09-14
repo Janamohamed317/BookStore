@@ -6,17 +6,14 @@ import type { Author, newAuthor } from "../../types/Author";
 import type { Book, newBook } from "../../types/Book";
 
 type AppContextType = {
-    books: Book[] | undefined;
     authors: Author[] | undefined;
-    isLoadingBooks: boolean;
+    getAuthors: () => void
     isLoadingAuthors: boolean;
     bookData: newBook;
     setBookData: React.Dispatch<React.SetStateAction<newBook>>;
-    getAuthorID: (firstName: string) => Promise<void>;
-    authorData: newAuthor;
     setAuthorData: React.Dispatch<React.SetStateAction<newAuthor>>;
-    getBooks: () => void
-    getAuthors: () => void
+    authorData: newAuthor;
+    getAuthorID: (firstName: string) => Promise<void>;
 };
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -40,17 +37,6 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
         nationality: "",
     });
 
-    const {
-        data: books,
-        isLoading: isLoadingBooks,
-        refetch: getBooks,
-    } = useQuery<Book[]>({
-        queryKey: ["books"],
-        queryFn: async () => {
-            const res = await axios.get("http://localhost:5000/api/books");
-            return res.data;
-        },
-    });
 
     const {
         data: authors,
@@ -81,9 +67,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
     };
 
     const contextValue: AppContextType = {
-        books,
         authors,
-        isLoadingBooks,
         isLoadingAuthors,
         bookData,
         setBookData,
@@ -91,7 +75,6 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
         authorData,
         setAuthorData,
         getAuthors,
-        getBooks,
     };
 
     return (

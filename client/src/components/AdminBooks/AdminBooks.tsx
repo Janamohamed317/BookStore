@@ -1,19 +1,12 @@
 import { useNavigate } from "react-router";
-import { AppContext } from "../Context/AppContext";
-import { useContext, useEffect } from "react";
 import axios from "axios";
 import type { Book } from "../../types/Book";
 import Swal from "sweetalert2";
 import type { ErrorResponse } from "../../types/Error";
+import { useQuery } from "@tanstack/react-query";
 
 function AdminBooks() {
-    const context = useContext(AppContext);
     const navigate = useNavigate()
-    if (!context) {
-        throw new Error("DisplayBooks must be used within an AppContextProvider");
-    }
-    const { books, getBooks } = context;
-
     const token = localStorage.getItem("token")
 
     const NavigateToEdit = (book: Book) => {
@@ -24,9 +17,15 @@ function AdminBooks() {
         })
     }
 
-    useEffect(() => {
-        getBooks()
-    }, books)
+    const { data, isLoading, refetch } = useQuery<Book[]>({
+        queryKey: ["books"],
+        queryFn: async () => {
+            const res = await axios.get("http://localhost:5000/api/books");
+            return res.data;
+        },
+    })
+
+
 
     const handleDeleteBook = async (bookId: string) => {
         try {
@@ -35,8 +34,13 @@ function AdminBooks() {
                     token: token
                 }
             })
-            await getBooks()
-
+            await refetch()
+            Swal.fire({
+                icon: "success",
+                title: "Deleted!",
+                text: "The book has been removed.",
+                confirmButtonText: "OK",
+            });
         } catch (error) {
             if (axios.isAxiosError<ErrorResponse>(error)) {
                 Swal.fire({
@@ -49,6 +53,9 @@ function AdminBooks() {
         }
 
     }
+    if (isLoading) {
+        return <p>Loading Books</p>
+    }
 
     return (
         <div className="mt-6 flex flex-col p-4 bg-[#f5f5dc] rounded-lg shadow-md">
@@ -59,7 +66,7 @@ function AdminBooks() {
                 Add new book
             </button>
 
-            {books?.map((book) => (
+            {data?.map((book) => (
                 <div
                     className="flex justify-between gap-5 items-center mt-5 p-3 bg-white/70 rounded-lg shadow-sm"
                     key={book._id}

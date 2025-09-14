@@ -1,31 +1,49 @@
 import axios from "axios";
 import { useState } from "react";
 import Swal from "sweetalert2";
+import { useMutation } from "@tanstack/react-query";
 
 function ResetPassword() {
   const [email, setEmail] = useState<string>("");
 
-  const handleEmailSubmission = async () => {
-    try {
-      const res = await axios.post(
+  const resetPasswordMutation = useMutation({
+    mutationFn: async () => {
+      return await axios.post(
         "http://localhost:5000/api/password/forgot-password",
         { email }
       );
-
+    },
+    onSuccess: () => {
       Swal.fire({
         icon: "success",
         text: "Password reset link has been sent to your email.",
         confirmButtonText: "OK",
       });
-      console.log(res);
-    } catch (error: any) {
+    },
+    onError: (error: unknown) => {
+      if (axios.isAxiosError(error)) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.response?.data?.message || "Something went wrong",
+          confirmButtonText: "OK",
+        });
+      }
+    },
+  });
+
+  const handleEmailSubmission = () => {
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
       Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error.response?.data?.message || "Something went wrong",
+        icon: "warning",
+        title: "Invalid Email",
+        text: "Please enter a valid email address.",
         confirmButtonText: "OK",
       });
+      return;
     }
+
+    resetPasswordMutation.mutate();
   };
 
   return (
@@ -49,9 +67,10 @@ function ResetPassword() {
 
         <button
           onClick={handleEmailSubmission}
-          className="bg-[#a47148] text-[#f5f5dc] p-2 rounded hover:bg-[#8b5e3c] transition cursor-pointer"
+          disabled={resetPasswordMutation.isPending || !email}
+          className="bg-[#a47148] text-[#f5f5dc] p-2 rounded hover:bg-[#8b5e3c] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Send Email
+          {resetPasswordMutation.isPending ? "Sending..." : "Send Email"}
         </button>
       </div>
     </div>

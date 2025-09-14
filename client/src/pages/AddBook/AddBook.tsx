@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router';
 import { UploadImg } from '../../utils/UploadImg';
 import { resetBookData } from '../../utils/ResetBookData';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 function AddBook() {
     const context = useContext(AppContext);
@@ -20,19 +21,14 @@ function AddBook() {
 
 
     useEffect(() => {
-        setBookData({
-            author: "",
-            title: "",
-            description: "",
-            cover: "",
-            price: 0,
-            image:""
-
-        });
+        resetBookData(setBookData)
     }, []);
 
-    const handleBookCreation = async () => {
-        try {
+
+    const queryClient = useQueryClient();
+
+    const addBook = useMutation({
+        mutationFn: async () => {
             const res = await axios.post("http://localhost:5000/api/books/add", {
                 title: bookData.title,
                 author: bookData.author,
@@ -44,8 +40,10 @@ function AddBook() {
                     token: token
                 }
             })
-            
             await UploadImg(res.data, file)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["books"] });
             navigate("/admin")
             resetBookData(setBookData)
             Swal.fire({
@@ -53,16 +51,21 @@ function AddBook() {
                 text: "Book Created",
                 confirmButtonText: 'OK',
             });
-        } catch (error) {
+        },
+        onError: (error) => {
             if (axios.isAxiosError<ErrorResponse>(error)) {
                 Swal.fire({
-                    icon: 'error',
-                    title: 'There is an error',
+                    icon: "error",
+                    title: "There is an error",
                     text: error.response?.data.message,
-                    confirmButtonText: 'OK',
+                    confirmButtonText: "OK",
                 });
             }
-        }
+        },
+
+    })
+    const handleBookCreation = async () => {
+        addBook.mutate()
     }
 
     return (

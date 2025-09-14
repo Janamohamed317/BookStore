@@ -3,13 +3,16 @@ import { useContext, useEffect } from "react"
 import Swal from "sweetalert2"
 import type { ErrorResponse } from "../../types/Error"
 import { AppContext } from "../Context/AppContext"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 function AddAuthor() {
     const context = useContext(AppContext);
     if (!context) {
         throw new Error("Authors must be used within an AppContextProvider");
     }
-    const { getAuthors, setAuthorData, authorData } = context;
+    const { setAuthorData, authorData } = context;
+
+    const queryClient = useQueryClient();
 
     const token = localStorage.getItem("token")
 
@@ -25,8 +28,8 @@ function AddAuthor() {
         });
     }, []);
 
-    const handleSubmit = async () => {
-        try {
+    const addAuthor = useMutation({
+        mutationFn: async () => {
             await axios.post("http://localhost:5000/api/authors/add", {
                 fullName: authorData.fullName,
                 nationality: authorData.nationality,
@@ -35,7 +38,22 @@ function AddAuthor() {
                     token: token
                 }
             })
-        } catch (error) {
+        },
+        onSuccess: () => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Author is Added Successfully',
+                confirmButtonText: 'OK',
+            });
+            setAuthorData({
+                fullName: "",
+                nationality: ""
+            })
+            queryClient.invalidateQueries({ queryKey: ["authors"] });
+
+        },
+
+        onError: (error) => {
             if (axios.isAxiosError<ErrorResponse>(error)) {
                 Swal.fire({
                     icon: 'error',
@@ -45,13 +63,11 @@ function AddAuthor() {
                 });
             }
         }
-        finally {
-            setAuthorData({
-                fullName: "",
-                nationality: ""
-            })
-            getAuthors()
-        }
+
+    })
+
+    const handleSubmit = async () => {
+        addAuthor.mutate()
     }
 
     return (

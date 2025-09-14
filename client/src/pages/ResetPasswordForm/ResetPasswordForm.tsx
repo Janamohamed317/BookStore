@@ -1,7 +1,8 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
-import Swal from 'sweetalert2';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import Swal from "sweetalert2";
+import { useMutation } from "@tanstack/react-query";
 
 function ResetPasswordForm() {
     const { id, token } = useParams<{ id: string; token: string }>();
@@ -14,36 +15,39 @@ function ResetPasswordForm() {
             try {
                 await axios.get(`http://localhost:5000/api/password/reset-password/${id}/${token}`);
                 setStatus("valid");
-            } catch (error) {
+            } catch {
                 setStatus("invalid");
             }
         };
         verifyLink();
     }, [id, token]);
 
-    const handlePasswordReset = async () => {
-        try {
-            await axios.post(
+    const resetPasswordMutation = useMutation({
+        mutationFn: async () => {
+            return await axios.post(
                 `http://localhost:5000/api/password/reset-password/${id}/${token}`,
                 { password }
             );
-
+        },
+        onSuccess: () => {
             Swal.fire({
                 icon: "success",
                 text: "Your password has been reset successfully!",
                 confirmButtonText: "OK",
             });
-
             navigate("/login");
-        } catch (error: any) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: error.response?.data?.message || "Reset link is invalid or expired.",
-                confirmButtonText: "OK",
-            });
-        }
-    };
+        },
+        onError: (error: unknown) => {
+            if (axios.isAxiosError(error)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: error.response?.data?.message || "Reset link is invalid or expired.",
+                    confirmButtonText: "OK",
+                });
+            }
+        },
+    });
 
     if (status === "loading")
         return <p className="text-center text-[#a47148] font-bold">Verifying link...</p>;
@@ -51,7 +55,7 @@ function ResetPasswordForm() {
     if (status === "invalid")
         return (
             <p className="text-center text-red-500 font-bold">
-                ❌ This reset link is invalid or has expired.
+                This reset link is invalid or has expired.
             </p>
         );
 
@@ -75,10 +79,11 @@ function ResetPasswordForm() {
                 />
 
                 <button
-                    onClick={handlePasswordReset}
-                    className="bg-[#a47148] text-[#f5f5dc] p-2 rounded hover:bg-[#8b5e3c] transition cursor-pointer"
+                    onClick={() => resetPasswordMutation.mutate()}
+                    disabled={resetPasswordMutation.isPending || !password}
+                    className="bg-[#a47148] text-[#f5f5dc] p-2 rounded hover:bg-[#8b5e3c] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    Reset Password
+                    {resetPasswordMutation.isPending ? "Resetting..." : "Reset Password"}
                 </button>
             </div>
         </div>

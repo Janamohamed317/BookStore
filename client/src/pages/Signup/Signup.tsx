@@ -1,7 +1,8 @@
 import { useState } from "react";
-import axios from "axios";
 import Swal from "sweetalert2";
+import axios from "axios";
 import { useNavigate } from "react-router";
+import { useMutation } from "@tanstack/react-query";
 import type { ErrorResponse } from "../../types/Error";
 import type { signup } from "../../types/User";
 
@@ -36,29 +37,39 @@ function Signup() {
         return true;
     };
 
-    const handleSubmit = async () => {
-        if (!validateData(formData)) return;
+    // ✅ Signup mutation
+    const signupMutation = useMutation({
+        mutationFn: async () => {
+            if (!validateData(formData)) throw new Error("Validation failed");
 
-        try {
             const res = await axios.post("http://localhost:5000/api/auth/register", {
                 email: formData.email,
                 username: formData.username,
                 password: formData.password,
             });
-
-            localStorage.setItem("token", res.data.token);
+            return res.data;
+        },
+        onSuccess: (data) => {
+            localStorage.setItem("token", data.token);
+            Swal.fire({
+                icon: "success",
+                title: "Signup Successful",
+                text: "Welcome to Bookstore!",
+                confirmButtonText: "OK",
+            });
             navigate("/");
-        } catch (error: any) {
+        },
+        onError: (error: unknown) => {
             if (axios.isAxiosError<ErrorResponse>(error)) {
                 Swal.fire({
                     icon: "warning",
                     title: "Signup Failed",
-                    text: error.response?.data.message,
+                    text: error.response?.data.message || "Something went wrong",
                     confirmButtonText: "OK",
                 });
             }
-        }
-    };
+        },
+    });
 
     return (
         <div className="flex justify-center items-center h-dvh">
@@ -107,10 +118,11 @@ function Signup() {
                 />
 
                 <button
-                    onClick={handleSubmit}
-                    className="bg-[#a47148] text-[#f5f5dc] rounded-2xl p-2 hover:bg-[#8b5e3c] transition cursor-pointer"
+                    onClick={() => signupMutation.mutate()}
+                    disabled={signupMutation.isPending}
+                    className="bg-[#a47148] text-[#f5f5dc] rounded-2xl p-2 hover:bg-[#8b5e3c] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    Submit
+                    {signupMutation.isPending ? "Signing up..." : "Submit"}
                 </button>
 
                 <span className="text-center text-[#f5f5dc]">

@@ -3,7 +3,8 @@ import { AppContext } from "../Context/AppContext";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import type { Author } from "../../types/Author";
-
+import { useMutation } from "@tanstack/react-query";
+import Swal from "sweetalert2";
 function GetAuthors() {
     const context = useContext(AppContext);
     if (!context) {
@@ -22,19 +23,25 @@ function GetAuthors() {
 
     const token = localStorage.getItem("token")
 
-    const handleDeleteAuthor = async (id: string) => {
-        try {
+
+    const deleteAuthor = useMutation({
+        mutationFn: async (id: string) => {
             await axios.delete(`http://localhost:5000/api/authors/delete/${id}`, {
                 headers: {
                     token: token
                 }
             })
-            await getAuthors()
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
+        },
+        onSuccess: () => getAuthors(),
+        onError: () =>
+            Swal.fire({
+                icon: "error",
+                text: "Failed to Delete Author"
+            })
+    })
+    const handleDeleteAuthor = (id: string) => {
+        deleteAuthor.mutate(id);
+    };
 
     return (
         <div className="mt-6 flex flex-col gap-3">
