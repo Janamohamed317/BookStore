@@ -1,12 +1,12 @@
 const express = require("express");
-const booksPath = require("./routes/books");
-const authorsPath = require("./routes/authors");
-const authPath = require("./routes/auth");
-const passwordPath = require("./routes/password");
-const uploadPath = require("./routes/upload");
-const usersPath = require("./routes/users");
-const dbConnection = require("./db/dbConnection");
-const { notFound, errorHandler } = require("./middlewares/errors")
+const booksPath = require("../routes/books");
+const authorsPath = require("../routes/authors");
+const authPath = require("../routes/auth");
+const passwordPath = require("../routes/password");
+const uploadPath = require("../routes/upload");
+const usersPath = require("../routes/users");
+const dbConnection = require("../db/dbConnection");
+const { notFound, errorHandler } = require("../middlewares/errors")
 const app = express();
 const helmet = require("helmet")
 const cors = require("cors")
@@ -16,6 +16,7 @@ const path = require("path");
 // yhwl json l js obj
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
+ 
 
 // Helmet
 app.use(helmet())
