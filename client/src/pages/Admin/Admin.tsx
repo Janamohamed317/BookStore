@@ -6,7 +6,8 @@ import AdminBooks from "../../components/AdminBooks/AdminBooks";
 
 function Admin() {
 
-    const [activeTab, setActiveTab] = useState<string>("books");
+    const [activeTab, setActiveTab] = useState<string>("Books");
+    
     const renderContent = () => {
         switch (activeTab) {
             case "Authors":

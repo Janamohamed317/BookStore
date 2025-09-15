@@ -3,12 +3,10 @@ import type { ReactNode } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import type { Author, newAuthor } from "../../types/Author";
-import type { Book, newBook } from "../../types/Book";
+import type { newBook } from "../../types/Book";
 
 type AppContextType = {
     authors: Author[] | undefined;
-    getAuthors: () => void
-    isLoadingAuthors: boolean;
     bookData: newBook;
     setBookData: React.Dispatch<React.SetStateAction<newBook>>;
     setAuthorData: React.Dispatch<React.SetStateAction<newAuthor>>;
@@ -40,8 +38,6 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
     const {
         data: authors,
-        isLoading: isLoadingAuthors,
-        refetch: getAuthors,
     } = useQuery<Author[]>({
         queryKey: ["authors"],
         queryFn: async () => {
@@ -68,13 +64,11 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
     const contextValue: AppContextType = {
         authors,
-        isLoadingAuthors,
         bookData,
         setBookData,
         getAuthorID,
         authorData,
         setAuthorData,
-        getAuthors,
     };
 
     return (

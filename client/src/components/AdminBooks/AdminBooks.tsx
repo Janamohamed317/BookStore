@@ -3,11 +3,12 @@ import axios from "axios";
 import type { Book } from "../../types/Book";
 import Swal from "sweetalert2";
 import type { ErrorResponse } from "../../types/Error";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 function AdminBooks() {
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
+    const queryClient = useQueryClient();
 
     const NavigateToEdit = (book: Book) => {
         navigate('EditBook', {
@@ -17,7 +18,7 @@ function AdminBooks() {
         })
     }
 
-    const { data, isLoading, refetch } = useQuery<Book[]>({
+    const { data, isLoading } = useQuery<Book[]>({
         queryKey: ["books"],
         queryFn: async () => {
             const res = await axios.get("http://localhost:5000/api/books");
@@ -26,22 +27,24 @@ function AdminBooks() {
     })
 
 
-
-    const handleDeleteBook = async (bookId: string) => {
-        try {
-            await axios.delete(`http://localhost:5000/api/books/delete/${bookId}`, {
+    const deleteBook = useMutation({
+        mutationFn: async (bookId: string) => {
+            axios.delete(`http://localhost:5000/api/books/delete/${bookId}`, {
                 headers: {
                     token: token
                 }
             })
-            await refetch()
+        },
+        onSuccess: () => {
             Swal.fire({
                 icon: "success",
-                title: "Deleted!",
-                text: "The book has been removed.",
+                text: "The Book has been removed.",
                 confirmButtonText: "OK",
             });
-        } catch (error) {
+            queryClient.invalidateQueries({ queryKey: ["books"] });
+
+        },
+        onError: (error) => {
             if (axios.isAxiosError<ErrorResponse>(error)) {
                 Swal.fire({
                     icon: 'error',
@@ -51,8 +54,8 @@ function AdminBooks() {
                 });
             }
         }
+    })
 
-    }
     if (isLoading) {
         return <p>Loading Books</p>
     }
@@ -79,7 +82,7 @@ function AdminBooks() {
                     <div className="flex gap-3">
                         <button
                             className="bg-[#7b2d26] text-[#f5f5dc] px-3 py-2 rounded-lg hover:bg-[#5c1f19] transition"
-                            onClick={() => handleDeleteBook(book._id)}
+                            onClick={() => deleteBook.mutate(book._id)}
                         >
                             Delete
                         </button>

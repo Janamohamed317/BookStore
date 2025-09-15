@@ -3,15 +3,20 @@ import { AppContext } from "../Context/AppContext";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import type { Author } from "../../types/Author";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
+
+
+
 function GetAuthors() {
+    const token = localStorage.getItem("token")
+    const queryClient = useQueryClient();
     const context = useContext(AppContext);
+    const navigate = useNavigate()
     if (!context) {
         throw new Error("DisplayBooks must be used within an AppContextProvider");
     }
-    const navigate = useNavigate()
-    const { authors, getAuthors } = context;
+    const { authors } = context;
 
     const NavigateToEditAuthor = (author: Author) => {
         navigate('EditAuthor', {
@@ -20,8 +25,6 @@ function GetAuthors() {
             }
         })
     }
-
-    const token = localStorage.getItem("token")
 
 
     const deleteAuthor = useMutation({
@@ -32,16 +35,16 @@ function GetAuthors() {
                 }
             })
         },
-        onSuccess: () => getAuthors(),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["authors"] })
+        },
         onError: () =>
             Swal.fire({
                 icon: "error",
                 text: "Failed to Delete Author"
             })
     })
-    const handleDeleteAuthor = (id: string) => {
-        deleteAuthor.mutate(id);
-    };
+
 
     return (
         <div className="mt-6 flex flex-col gap-3">
@@ -57,10 +60,11 @@ function GetAuthors() {
                     <div className="flex gap-3">
                         <button
                             className="bg-[#7b2d26] text-[#f5f5dc] px-3 py-1 rounded-lg hover:bg-[#5c1f19] transition cursor-pointer"
-                            onClick={() => handleDeleteAuthor(author._id)}
+                            onClick={() => deleteAuthor.mutate(author._id)}
                         >
                             Delete
                         </button>
+
                         <button
                             className="bg-[#a47148] text-[#f5f5dc] px-3 py-1 rounded-lg hover:bg-[#8b5e3c] transition cursor-pointer"
                             onClick={() => NavigateToEditAuthor(author)}
@@ -69,8 +73,9 @@ function GetAuthors() {
                         </button>
                     </div>
                 </div>
-            ))}
-        </div>
+            ))
+            }
+        </div >
     )
 }
 

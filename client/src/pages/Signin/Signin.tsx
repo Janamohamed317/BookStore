@@ -79,14 +79,13 @@ function Signin() {
 
                 <button
                     onClick={() => signinMutation.mutate()}
-                    disabled={signinMutation.isPending}
                     className="bg-[#a47148] text-[#f5f5dc] rounded-2xl p-2 hover:bg-[#8b5e3c] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    {signinMutation.isPending ? "Signing in..." : "Submit"}
+                    Sign in
                 </button>
 
                 <span className="text-center text-[#f5f5dc]">
-                    Don&apos;t have an account?{" "}
+                    Doesn't have an account?{" "}
                     <span
                         className="underline cursor-pointer text-[#a47148]"
                         onClick={() => navigate("/signup")}

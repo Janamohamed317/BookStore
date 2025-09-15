@@ -1,6 +1,5 @@
 import axios from 'axios';
 import type { Book } from '../../types/Book';
-import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import type { Author } from '../../types/Author';
 
@@ -8,20 +7,18 @@ type BookInfoProps = {
     book: Book;
 };
 
+
 function BookCard({ book }: BookInfoProps) {
-    const [authorName, setAuthorName] = useState<string>("")
     const authorId = book.author._id
 
+    
     const { data } = useQuery<Author>({
         queryKey: ["authorName", authorId],
         queryFn: async () => {
-            const res = await axios.get<Author>(`http://localhost:5000/api/authors/${authorId}`)
+            const res = await axios.get(`http://localhost:5000/api/authors/${authorId}`)
             return res.data
-        }
+        },
     })
-
-
-
 
 
     return (

@@ -37,17 +37,17 @@ function Signup() {
         return true;
     };
 
-    // ✅ Signup mutation
     const signupMutation = useMutation({
         mutationFn: async () => {
-            if (!validateData(formData)) throw new Error("Validation failed");
+            if (validateData(formData)) {
 
-            const res = await axios.post("http://localhost:5000/api/auth/register", {
-                email: formData.email,
-                username: formData.username,
-                password: formData.password,
-            });
-            return res.data;
+                const res = await axios.post("http://localhost:5000/api/auth/register", {
+                    email: formData.email,
+                    username: formData.username,
+                    password: formData.password,
+                });
+                return res.data;
+            }
         },
         onSuccess: (data) => {
             localStorage.setItem("token", data.token);
@@ -119,10 +119,9 @@ function Signup() {
 
                 <button
                     onClick={() => signupMutation.mutate()}
-                    disabled={signupMutation.isPending}
                     className="bg-[#a47148] text-[#f5f5dc] rounded-2xl p-2 hover:bg-[#8b5e3c] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    {signupMutation.isPending ? "Signing up..." : "Submit"}
+                    Sign Up
                 </button>
 
                 <span className="text-center text-[#f5f5dc]">

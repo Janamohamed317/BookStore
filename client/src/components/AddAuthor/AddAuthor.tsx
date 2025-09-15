@@ -7,14 +7,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 function AddAuthor() {
     const context = useContext(AppContext);
+    const queryClient = useQueryClient();
+    const token = localStorage.getItem("token")
+
     if (!context) {
         throw new Error("Authors must be used within an AppContextProvider");
     }
+
     const { setAuthorData, authorData } = context;
-
-    const queryClient = useQueryClient();
-
-    const token = localStorage.getItem("token")
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -52,7 +52,6 @@ function AddAuthor() {
             queryClient.invalidateQueries({ queryKey: ["authors"] });
 
         },
-
         onError: (error) => {
             if (axios.isAxiosError<ErrorResponse>(error)) {
                 Swal.fire({
@@ -63,12 +62,7 @@ function AddAuthor() {
                 });
             }
         }
-
     })
-
-    const handleSubmit = async () => {
-        addAuthor.mutate()
-    }
 
     return (
         <div className="flex justify-center items-center gap-3 mt-6 bg-[#3e2723]/90 p-4 rounded-lg shadow-md">
@@ -93,7 +87,7 @@ function AddAuthor() {
             />
 
             <button
-                onClick={handleSubmit}
+                onClick={() => addAuthor.mutate()}
                 className="bg-[#a47148] hover:bg-[#8b5e3c] px-4 py-2 rounded-lg text-[#f5f5dc] font-semibold transition"
             >
                 Submit

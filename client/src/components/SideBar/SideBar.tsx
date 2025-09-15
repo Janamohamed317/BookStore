@@ -1,7 +1,6 @@
-import React from "react";
 import { sideBarItems } from "../../assets/assets";
 
-interface SideBarProps {
+type SideBarProps = {
   setActiveTab: (tab: string) => void;
 }
 

@@ -23,12 +23,20 @@ function EditBook() {
     const [file, setFile] = useState<File | null>(null);
     const queryClient = useQueryClient();
 
+
     useEffect(() => {
-        resetBookData(setBookData)
-    }, [book, setBookData]);
+        setBookData({
+            title: book.title,
+            author: book.author._id,
+            description: book.description,
+            cover: book.cover,
+            price: book.price,
+            image: book.image
+        });
+    }, [book]);
 
     const editBook = useMutation({
-        mutationFn: async () => {
+        mutationFn: async () => {            
             await axios.put(
                 `http://localhost:5000/api/books/edit/${book._id}`,
                 {
@@ -40,12 +48,10 @@ function EditBook() {
                 },
                 { headers: { token } }
             );
-
             await UploadImg(book, file);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["books"] });
-
             resetBookData(setBookData);
             Swal.fire({
                 icon: "success",
@@ -67,9 +73,6 @@ function EditBook() {
         },
     });
 
-    const handleEditBook = () => {
-        editBook.mutate();
-    };
 
     return (
         <div className="flex justify-center items-center h-screen">
@@ -183,14 +186,13 @@ function EditBook() {
                 />
 
                 <button
-                    onClick={handleEditBook}
-                    disabled={editBook.isPending}
+                    onClick={() => editBook.mutate()}
                     className="bg-[#a47148] text-[#f5f5dc] p-2 rounded hover:bg-[#8b5e3c] transition cursor-pointer"
                 >
-                    {editBook.isPending ? "Updating..." : "Update Book"}
+                    Edit Book
                 </button>
             </div>
-        </div>
+        </div >
     );
 }
 

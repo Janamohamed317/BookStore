@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import Swal from "sweetalert2";
 import { useMutation } from "@tanstack/react-query";
@@ -7,16 +7,15 @@ import { useMutation } from "@tanstack/react-query";
 function ResetPasswordForm() {
     const { id, token } = useParams<{ id: string; token: string }>();
     const [password, setPassword] = useState<string>("");
-    const [status, setStatus] = useState<"loading" | "valid" | "invalid">("loading");
+    const [invalid, setInvalid] = useState<boolean>(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         const verifyLink = async () => {
             try {
                 await axios.get(`http://localhost:5000/api/password/reset-password/${id}/${token}`);
-                setStatus("valid");
             } catch {
-                setStatus("invalid");
+                setInvalid(true)
             }
         };
         verifyLink();
@@ -49,16 +48,9 @@ function ResetPasswordForm() {
         },
     });
 
-    if (status === "loading")
-        return <p className="text-center text-[#a47148] font-bold">Verifying link...</p>;
-
-    if (status === "invalid")
-        return (
-            <p className="text-center text-red-500 font-bold">
-                This reset link is invalid or has expired.
-            </p>
-        );
-
+    if (invalid === true) {
+        return <p>This reset link is invalid or has expired. </ p>
+    }
     return (
         <div className="flex justify-center items-center h-screen">
             <div className="flex flex-col gap-4 w-96 bg-[#3e2723] p-6 rounded-xl shadow-md">
@@ -80,10 +72,8 @@ function ResetPasswordForm() {
 
                 <button
                     onClick={() => resetPasswordMutation.mutate()}
-                    disabled={resetPasswordMutation.isPending || !password}
                     className="bg-[#a47148] text-[#f5f5dc] p-2 rounded hover:bg-[#8b5e3c] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    {resetPasswordMutation.isPending ? "Resetting..." : "Reset Password"}
                 </button>
             </div>
         </div>

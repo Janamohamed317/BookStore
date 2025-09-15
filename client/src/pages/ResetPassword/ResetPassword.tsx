@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 function ResetPassword() {
   const [email, setEmail] = useState<string>("");
 
-  const resetPasswordMutation = useMutation({
+  const resetPassword = useMutation({
     mutationFn: async () => {
       return await axios.post(
         "http://localhost:5000/api/password/forgot-password",
@@ -25,7 +25,7 @@ function ResetPassword() {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: error.response?.data?.message || "Something went wrong",
+          text: error.response?.data?.message,
           confirmButtonText: "OK",
         });
       }
@@ -33,7 +33,8 @@ function ResetPassword() {
   });
 
   const handleEmailSubmission = () => {
-    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    if (!email || !emailRegex.test(email)) {
       Swal.fire({
         icon: "warning",
         title: "Invalid Email",
@@ -43,7 +44,7 @@ function ResetPassword() {
       return;
     }
 
-    resetPasswordMutation.mutate();
+    resetPassword.mutate();
   };
 
   return (
@@ -67,10 +68,9 @@ function ResetPassword() {
 
         <button
           onClick={handleEmailSubmission}
-          disabled={resetPasswordMutation.isPending || !email}
           className="bg-[#a47148] text-[#f5f5dc] p-2 rounded hover:bg-[#8b5e3c] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {resetPasswordMutation.isPending ? "Sending..." : "Send Email"}
+          Send Email
         </button>
       </div>
     </div>

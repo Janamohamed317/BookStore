@@ -15,6 +15,7 @@ function AddBook() {
     }
 
     const { authors, getAuthorID, setBookData, bookData } = context;
+    const queryClient = useQueryClient();
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
     const [file, setFile] = useState<File | null>(null);
@@ -25,7 +26,6 @@ function AddBook() {
     }, []);
 
 
-    const queryClient = useQueryClient();
 
     const addBook = useMutation({
         mutationFn: async () => {
@@ -62,11 +62,7 @@ function AddBook() {
                 });
             }
         },
-
     })
-    const handleBookCreation = async () => {
-        addBook.mutate()
-    }
 
     return (
         <div className="flex justify-center items-center h-screen">
@@ -151,7 +147,7 @@ function AddBook() {
                 />
 
                 <button
-                    onClick={handleBookCreation}
+                    onClick={() => addBook.mutate()}
                     className="bg-[#a47148] text-[#f5f5dc] p-2 rounded hover:bg-[#8b5e3c] transition"
                 >
                     Add Book

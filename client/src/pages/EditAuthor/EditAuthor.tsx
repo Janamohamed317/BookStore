@@ -7,25 +7,27 @@ import type { ErrorResponse } from "../../types/Error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 function EditAuthor() {
-    const context = useContext(AppContext);
+    const token = localStorage.getItem("token");
+    const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const context = useContext(AppContext);
+
     if (!context) {
         throw new Error("EditAuthor must be used within an AppContextProvider");
     }
-    const { authorData, setAuthorData, getAuthors } = context;
+    
+    const { authorData, setAuthorData } = context;
 
     const location = useLocation();
     const { author } = location.state;
 
-    const token = localStorage.getItem("token");
-    const queryClient = useQueryClient();
 
     useEffect(() => {
         setAuthorData({
             fullName: author.fullName,
             nationality: author.nationality,
         });
-    }, [author, setAuthorData]);
+    }, [author]);
 
     const editAuthor = useMutation({
         mutationFn: async () => {
@@ -42,7 +44,7 @@ function EditAuthor() {
             return res.data;
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["authors"] }); 
+            queryClient.invalidateQueries({ queryKey: ["authors"] });
             Swal.fire({
                 icon: "success",
                 text: "Author successfully updated",
