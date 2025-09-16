@@ -3,18 +3,17 @@ import { useContext, useEffect } from "react"
 import Swal from "sweetalert2"
 import type { ErrorResponse } from "../../types/Error"
 import { AppContext } from "../Context/AppContext"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 
 function AddAuthor() {
     const context = useContext(AppContext);
-    const queryClient = useQueryClient();
     const token = localStorage.getItem("token")
 
     if (!context) {
         throw new Error("Authors must be used within an AppContextProvider");
     }
 
-    const { setAuthorData, authorData } = context;
+    const { setAuthorData, authorData, getAuthors } = context;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -49,7 +48,7 @@ function AddAuthor() {
                 fullName: "",
                 nationality: ""
             })
-            queryClient.invalidateQueries({ queryKey: ["authors"] });
+            getAuthors()
 
         },
         onError: (error) => {

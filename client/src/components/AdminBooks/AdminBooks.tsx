@@ -18,12 +18,13 @@ function AdminBooks() {
         })
     }
 
-    const { data, isLoading } = useQuery<Book[]>({
+    const { data, isLoading, refetch } = useQuery<Book[]>({
         queryKey: ["books"],
         queryFn: async () => {
             const res = await axios.get("http://localhost:5000/api/books");
             return res.data;
         },
+        refetchOnWindowFocus: false,
     })
 
 
@@ -35,14 +36,13 @@ function AdminBooks() {
                 }
             })
         },
-        onSuccess: () => {
+        onSuccess: async () => {
             Swal.fire({
                 icon: "success",
                 text: "The Book has been removed.",
                 confirmButtonText: "OK",
             });
-            queryClient.invalidateQueries({ queryKey: ["books"] });
-
+            await refetch()
         },
         onError: (error) => {
             if (axios.isAxiosError<ErrorResponse>(error)) {

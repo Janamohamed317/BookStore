@@ -14,6 +14,7 @@ function DisplayBooks() {
             const res = await axios.get(`http://localhost:5000/api/books?pageNumber=${pageNumber}`);
             return res.data
         },
+        refetchOnWindowFocus: false,
     });
 
     if (isLoading) {

@@ -14,7 +14,7 @@ function AddBook() {
         throw new Error("AddBook must be used within an AppContextProvider");
     }
 
-    const { authors, getAuthorID, setBookData, bookData } = context;
+    const { authors, AssignAuthorIdToAddedBook, setBookData, bookData } = context;
     const queryClient = useQueryClient();
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
@@ -35,6 +35,7 @@ function AddBook() {
                 description: bookData.description,
                 cover: bookData.cover,
                 price: bookData.price,
+                // quantity: 50
             }, {
                 headers: {
                     token: token
@@ -126,7 +127,7 @@ function AddBook() {
                 <select
                     id="authors"
                     className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded"
-                    onChange={(e) => getAuthorID(e.target.value)}
+                    onChange={(e) => AssignAuthorIdToAddedBook(e.target.value)}
                 >
                     <option value="">--Choose an author--</option>
                     {authors?.map((author) => (

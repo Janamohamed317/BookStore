@@ -3,20 +3,19 @@ import { AppContext } from "../Context/AppContext";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import type { Author } from "../../types/Author";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 
 
 
 function GetAuthors() {
     const token = localStorage.getItem("token")
-    const queryClient = useQueryClient();
     const context = useContext(AppContext);
     const navigate = useNavigate()
     if (!context) {
         throw new Error("DisplayBooks must be used within an AppContextProvider");
     }
-    const { authors } = context;
+    const { authors, getAuthors } = context;
 
     const NavigateToEditAuthor = (author: Author) => {
         navigate('EditAuthor', {
@@ -36,7 +35,7 @@ function GetAuthors() {
             })
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["authors"] })
+            getAuthors()
         },
         onError: () =>
             Swal.fire({

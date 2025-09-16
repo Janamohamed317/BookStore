@@ -9,24 +9,25 @@ const getAllAuthors = asyncHandler(
     }
 )
 
-
-const getAuthorByNameOrID = asyncHandler(async (req, res) => {
-    const { query } = req.params;
-    let author;
-
-    if (mongoose.Types.ObjectId.isValid(query)) {
-        author = await Author.findById(query);
-    }
+const getAuthorByName = asyncHandler(async (req, res) => {
+    const fullName = req.params.name;
+    const author = await Author.findOne({ fullName: fullName });
 
     if (!author) {
-        author = await Author.findOne({ fullName: query });
+        return res.status(404).json({ message: "Author Not Found" });
     }
+    res.status(200).json(author);
 
-    if (author) {
-        res.status(200).json(author);
-    } else {
-        res.status(404).json({ message: "Author Not Found" });
+})
+
+const getAuthorById = asyncHandler(async (req, res) => {
+    const Id = req.params.id;
+    const author = await Author.findById(Id);
+
+    if (!author) {
+        return res.status(404).json({ message: "Author Not Found" });
     }
+    res.status(200).json(author);
 })
 
 
@@ -41,7 +42,7 @@ const addAuthor = asyncHandler(async (req, res) => {
     if (author) {
         if (author.isDeleted) {
             author.isDeleted = false;
-            author.nationality = req.body.nationality; 
+            author.nationality = req.body.nationality;
             const result = await author.save();
             return res.status(200).json(result);
         }
@@ -113,5 +114,6 @@ module.exports = {
     deleteAuthor,
     updateAuthor,
     addAuthor,
-    getAuthorByNameOrID
+    getAuthorByName,
+    getAuthorById,
 }

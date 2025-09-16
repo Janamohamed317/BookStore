@@ -24,7 +24,7 @@ function verifyTokenAndUser(req, res, next) {
             next()
         }
         else {
-            res.status(403).json({ message: "You are not allowed, You Can Update Only Your Info" })
+            res.status(403).json({ message: "You are not allowed, You Can Update or View Only Your Info" })
         }
     })
 

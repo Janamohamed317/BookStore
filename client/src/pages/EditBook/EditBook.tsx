@@ -15,7 +15,7 @@ function EditBook() {
         throw new Error("EditBook must be used within an AppContextProvider");
     }
 
-    const { authors, getAuthorID, setBookData, bookData } = context;
+    const { authors, AssignAuthorIdToAddedBook, setBookData, bookData } = context;
     const location = useLocation();
     const { book } = location.state;
 
@@ -162,7 +162,7 @@ function EditBook() {
                 <select
                     id="author"
                     className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded"
-                    onChange={(e) => getAuthorID(e.target.value)}
+                    onChange={(e) => AssignAuthorIdToAddedBook(e.target.value)}
                     value={bookData.author}
                 >
                     <option value="">--Choose an author--</option>

@@ -11,7 +11,8 @@ type AppContextType = {
     setBookData: React.Dispatch<React.SetStateAction<newBook>>;
     setAuthorData: React.Dispatch<React.SetStateAction<newAuthor>>;
     authorData: newAuthor;
-    getAuthorID: (firstName: string) => Promise<void>;
+    AssignAuthorIdToAddedBook: (firstName: string) => void;
+    getAuthors: () => void
 };
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -37,25 +38,25 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
 
     const {
-        data: authors,
+        data: authors, refetch: getAuthors
     } = useQuery<Author[]>({
         queryKey: ["authors"],
         queryFn: async () => {
             const res = await axios.get("http://localhost:5000/api/authors");
             return res.data;
         },
+
     });
 
-
-    const getAuthorID = async (firstName: string) => {
+    // remove setBookData ????
+    const AssignAuthorIdToAddedBook = async (firstName: string) => {
         try {
             const res = await axios.get(
-                `http://localhost:5000/api/authors/${firstName}`
+                `http://localhost:5000/api/authors/name/${firstName}`
             );
-            const authorId = res.data._id;
             setBookData((prev) => ({
                 ...prev,
-                author: authorId,
+                author: res.data._id,
             }));
         } catch (error) {
             console.error("Error fetching author ID:", error);
@@ -66,9 +67,10 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
         authors,
         bookData,
         setBookData,
-        getAuthorID,
+        AssignAuthorIdToAddedBook,
         authorData,
         setAuthorData,
+        getAuthors,
     };
 
     return (

@@ -50,7 +50,8 @@ const addBook = asyncHandler(
             description: req.body.description,
             cover: req.body.cover,
             price: req.body.price,
-            image: req.body.image
+            image: req.body.image,
+            quantity: req.body.quantity
         })
 
         const result = await book.save()
@@ -107,11 +108,12 @@ const deleteBook = asyncHandler(
 )
 
 
+
+
 module.exports = {
     getAllBooks,
     getBookByID,
     addBook,
     editBook,
     deleteBook,
-
 }

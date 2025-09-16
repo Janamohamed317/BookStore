@@ -5,6 +5,7 @@ const authPath = require("./routes/auth");
 const passwordPath = require("./routes/password");
 const uploadPath = require("./routes/upload");
 const usersPath = require("./routes/users");
+const ordersPath = require("./routes/orders")
 const dbConnection = require("./db/dbConnection");
 const { notFound, errorHandler } = require("./middlewares/errors")
 const app = express();
@@ -16,8 +17,8 @@ const path = require("path");
 // yhwl json l js obj
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
- 
- 
+
+
 
 // Helmet
 app.use(helmet())
@@ -48,6 +49,8 @@ app.use('/api/auth', authPath);
 app.use('/api/users', usersPath);
 app.use('/api/password', passwordPath);
 app.use('/api/upload', uploadPath);
+app.use('/api/order', ordersPath);
+
 
 
 // Error Handler Middleware

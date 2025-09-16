@@ -14,3 +14,4 @@ export interface newAuthor {
 export interface bookAuthor {
     fullName: string;
 }
+

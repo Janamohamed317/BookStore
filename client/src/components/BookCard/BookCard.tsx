@@ -11,13 +11,14 @@ type BookInfoProps = {
 function BookCard({ book }: BookInfoProps) {
     const authorId = book.author._id
 
-    
+
     const { data } = useQuery<Author>({
         queryKey: ["authorName", authorId],
         queryFn: async () => {
             const res = await axios.get(`http://localhost:5000/api/authors/${authorId}`)
             return res.data
         },
+        refetchOnWindowFocus: false,
     })
 
 

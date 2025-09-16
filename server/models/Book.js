@@ -39,6 +39,11 @@ const bookSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: ["Soft Cover", "Hard Cover"],
+    },
+    quantity:
+    {
+        type: Number,
+        required: true
     }
 
 }, {
@@ -55,6 +60,8 @@ function ValidateBookCreation(obj) {
         description: Joi.string().trim().required(),
         price: Joi.number().min(1).required(),
         cover: Joi.string().valid("Soft Cover", "Hard Cover").required(),
+        quantity: Joi.number().required().min(1),
+
     });
 
     return schema.validate(obj);
@@ -67,6 +74,8 @@ function ValidateUpdateBook(obj) {
         description: Joi.string().trim(),
         price: Joi.number().min(1),
         cover: Joi.string().valid("Soft Cover", "Hard Cover"),
+        quantity: Joi.number().min(1),
+
     });
 
     return schema.validate(obj);
