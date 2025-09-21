@@ -13,7 +13,7 @@ const updateUser = asyncHandler(async (req, res) => {
         const salt = await bcrypt.genSalt(10)
         req.body.password = await bcrypt.hash(req.body.password, salt)
     }
-    
+
     const UpdatedUser = await User.findByIdAndUpdate(req.params.id, {
         $set:
         {
@@ -28,8 +28,16 @@ const updateUser = asyncHandler(async (req, res) => {
 
 
 const getAllUsers = asyncHandler(async (req, res) => {
-    const users = await User.find().select("-password")
+    const { blocked } = req.query
+    let users
 
+    // feh hena moshkla lw b false 
+    if (blocked) {
+        users = await User.find({ blocked: blocked }).select("-password")
+    }
+    else {
+        users = await User.find().select("-password")
+    }
     res.status(200).json(users)
 })
 
@@ -54,6 +62,31 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
 })
 
+const blockUser = asyncHandler(async (req, res) => {
+
+    const user = await User.findByIdAndUpdate(req.params.id, {
+        $set: {
+            blocked: true
+        }
+    }, { new: true })
+    if (!user) {
+        return res.status(404).json({ message: "User Not Found" })
+    }
+    res.status(200).json({ user, message: "User is Blocked successfully" })
+})
+
+
+const unblockUser = asyncHandler(async (req, res) => {
+    const user = await User.findByIdAndUpdate(req.params.id, {
+        $set: {
+            blocked: false
+        }
+    }, { new: true })
+    if (!user) {
+        return res.status(404).json({ message: "User Not Found" })
+    }
+    res.status(200).json({ message: "User is Unblocked successfully" })
+})
 
 module.exports =
 {
@@ -61,4 +94,6 @@ module.exports =
     getUserById,
     deleteUser,
     updateUser,
+    blockUser,
+    unblockUser,
 }

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const Joi = require("joi");
+const { nanoid } = require("nanoid");
 
 
 const orderSchema = new mongoose.Schema(
@@ -31,7 +32,7 @@ const orderSchema = new mongoose.Schema(
                 {
                     type: Number,
                     required: true,
-                    min: 1
+                    min: 0
                 }
             },
         ],
@@ -49,14 +50,22 @@ const orderSchema = new mongoose.Schema(
         },
         subTotal: {
             type: Number,
-            required: true,
-            min: 1
+            min: 30,
+            default: 30
         },
         status: {
             type: String,
             default: "Pending"
-        }
-    }
+        },
+        orderNumber: {
+            type: String,
+            unique: true, 
+            required: true,
+            default: () => "ORD-" + nanoid(10), 
+        },
+    },
+    { timestamps: true }
+
 )
 
 const Order = mongoose.model("Order", orderSchema)
@@ -71,14 +80,14 @@ function ValidateOrderCreation(obj) {
                         quantity: Joi.number().required().min(1),
                         title: Joi.string().required(),
                         image: Joi.string(),
-                        price: Joi.number().required(),
+                        price: Joi.number().required().min(0),
                     })
                 )
                 .min(1)
                 .required(),
             user: Joi.string().required(),
             confirmed: Joi.boolean(),
-            subTotal: Joi.number().required().min(1),
+            subTotal: Joi.number().min(0),
             status: Joi.boolean()
 
         }

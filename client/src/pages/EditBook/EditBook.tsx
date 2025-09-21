@@ -1,16 +1,10 @@
 import { useState, useContext, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation } from "react-router";
 import { AppContext } from "../../components/Context/AppContext";
-import axios from "axios";
-import Swal from "sweetalert2";
-import { UploadImg } from "../../utils/UploadImg";
-import { resetBookData } from "../../utils/ResetBookData";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { ErrorResponse } from "../../types/Error";
+import useEditBook from "../../hooks/books/useEditBook";
 
 function EditBook() {
     const context = useContext(AppContext);
-    const navigate = useNavigate();
     if (!context) {
         throw new Error("EditBook must be used within an AppContextProvider");
     }
@@ -19,9 +13,7 @@ function EditBook() {
     const location = useLocation();
     const { book } = location.state;
 
-    const token = localStorage.getItem("token");
     const [file, setFile] = useState<File | null>(null);
-    const queryClient = useQueryClient();
 
 
     useEffect(() => {
@@ -31,47 +23,12 @@ function EditBook() {
             description: book.description,
             cover: book.cover,
             price: book.price,
-            image: book.image
+            image: book.image,
+            quantity: book.quantity
         });
     }, [book]);
 
-    const editBook = useMutation({
-        mutationFn: async () => {            
-            await axios.put(
-                `http://localhost:5000/api/books/edit/${book._id}`,
-                {
-                    title: bookData.title,
-                    author: bookData.author,
-                    description: bookData.description,
-                    cover: bookData.cover,
-                    price: bookData.price,
-                },
-                { headers: { token } }
-            );
-            await UploadImg(book, file);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["books"] });
-            resetBookData(setBookData);
-            Swal.fire({
-                icon: "success",
-                text: "Book is successfully updated",
-                confirmButtonText: "OK",
-            });
-
-            navigate("/admin");
-        },
-        onError: (error) => {
-            if (axios.isAxiosError<ErrorResponse>(error)) {
-                Swal.fire({
-                    icon: "error",
-                    title: "There was an error",
-                    text: error.response?.data.message || "Network error",
-                    confirmButtonText: "OK",
-                });
-            }
-        },
-    });
+    const editBook = useEditBook(bookData, file, book, setBookData)
 
 
     return (

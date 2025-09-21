@@ -66,6 +66,16 @@ export default function Navbar() {
                             </a>
                         </li>
 
+
+                        <li className="block py-2 px-3 text-[#f5f5dc] rounded-sm 
+                                           hover:bg-[#5d4037] md:hover:bg-transparent 
+                                           md:border-0 md:hover:text-[#d7a86e] md:p-0 cursor-pointer"
+                            onClick={() =>
+                                navigate("/user")
+                            }>
+                            Profile
+                        </li>
+
                         <li className="block py-2 px-3 text-[#f5f5dc] rounded-sm 
                                            hover:bg-[#5d4037] md:hover:bg-transparent 
                                            md:border-0 md:hover:text-[#d7a86e] md:p-0 cursor-pointer"
@@ -74,6 +84,15 @@ export default function Navbar() {
                                 navigate("/signin");
                             }}>
                             Logout
+                        </li>
+
+                        <li className="block py-2 px-3 text-[#f5f5dc] rounded-sm 
+                                           hover:bg-[#5d4037] md:hover:bg-transparent 
+                                           md:border-0 md:hover:text-[#d7a86e] md:p-0 cursor-pointer"
+                            onClick={() =>{
+                                navigate("/cart")}
+                            }>
+                            Cart
                         </li>
                     </ul>
                 </div>

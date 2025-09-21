@@ -1,21 +1,18 @@
 import { useContext } from "react"
 import { AppContext } from "../Context/AppContext";
-import axios from "axios";
 import { useNavigate } from "react-router";
 import type { Author } from "../../types/Author";
-import { useMutation } from "@tanstack/react-query";
-import Swal from "sweetalert2";
+import useDeleteAuthor from "../../hooks/authors/useDeleteAuthor";
 
 
 
 function GetAuthors() {
-    const token = localStorage.getItem("token")
     const context = useContext(AppContext);
     const navigate = useNavigate()
     if (!context) {
         throw new Error("DisplayBooks must be used within an AppContextProvider");
     }
-    const { authors, getAuthors } = context;
+    const { authors } = context;
 
     const NavigateToEditAuthor = (author: Author) => {
         navigate('EditAuthor', {
@@ -26,23 +23,7 @@ function GetAuthors() {
     }
 
 
-    const deleteAuthor = useMutation({
-        mutationFn: async (id: string) => {
-            await axios.delete(`http://localhost:5000/api/authors/delete/${id}`, {
-                headers: {
-                    token: token
-                }
-            })
-        },
-        onSuccess: () => {
-            getAuthors()
-        },
-        onError: () =>
-            Swal.fire({
-                icon: "error",
-                text: "Failed to Delete Author"
-            })
-    })
+    const deleteAuthor = useDeleteAuthor()
 
 
     return (

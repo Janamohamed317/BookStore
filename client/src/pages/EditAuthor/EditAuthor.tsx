@@ -1,21 +1,15 @@
-import { useLocation, useNavigate } from "react-router";
+import { useLocation } from "react-router";
 import { AppContext } from "../../components/Context/AppContext";
 import { useContext, useEffect } from "react";
-import axios from "axios";
-import Swal from "sweetalert2";
-import type { ErrorResponse } from "../../types/Error";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useUpdateAuthor from "../../hooks/authors/useUpdateAuthor";
 
 function EditAuthor() {
-    const token = localStorage.getItem("token");
-    const queryClient = useQueryClient();
-    const navigate = useNavigate();
     const context = useContext(AppContext);
 
     if (!context) {
         throw new Error("EditAuthor must be used within an AppContextProvider");
     }
-    
+
     const { authorData, setAuthorData } = context;
 
     const location = useLocation();
@@ -29,40 +23,7 @@ function EditAuthor() {
         });
     }, [author]);
 
-    const editAuthor = useMutation({
-        mutationFn: async () => {
-            const res = await axios.put(
-                `http://localhost:5000/api/authors/edit/${author._id}`,
-                {
-                    fullName: authorData.fullName,
-                    nationality: authorData.nationality,
-                },
-                {
-                    headers: { token },
-                }
-            );
-            return res.data;
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["authors"] });
-            Swal.fire({
-                icon: "success",
-                text: "Author successfully updated",
-                confirmButtonText: "OK",
-            });
-            navigate("/admin");
-        },
-        onError: (error) => {
-            if (axios.isAxiosError<ErrorResponse>(error)) {
-                Swal.fire({
-                    icon: "error",
-                    title: "There is an error",
-                    text: error.response?.data.message || "Network error",
-                    confirmButtonText: "OK",
-                });
-            }
-        },
-    });
+    const editAuthor = useUpdateAuthor(authorData, author)
 
     return (
         <div className="flex justify-center items-center h-screen">

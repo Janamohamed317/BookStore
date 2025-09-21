@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken")
+const { Order } = require("../models/Order")
 
 // verify ll token
 function verifyToken(req, res, next) {
@@ -17,9 +18,41 @@ function verifyToken(req, res, next) {
     }
 }
 
+
+function verifyTokenAndOrderOwner(req, res, next) {
+    verifyToken(req, res, async () => {
+        if (req.user.id === req.params.id || req.user.isAdmin) {
+            next()
+        }
+        else {
+            res.status(403).json({ message: "You are not allowed" })
+        }
+    })
+}
+
+
+function verifyOrderDetails(req, res, next) {
+    verifyToken(req, res, async () => {
+
+        const order = await Order.findById(req.params.id)
+        if (!order) {
+            res.status(403).json({ message: "Not Found" })
+        }
+
+        if (req.user.id === order.user.toString() || req.user.isAdmin) {
+            next()
+        }
+        else {
+            res.status(403).json({ message: "You are not allowed" })
+        }
+    })
+}
+
+
+
 // verify ll user
 function verifyTokenAndUser(req, res, next) {
-    verifyToken(req, res, () => {
+    verifyToken(req, res, async () => {
         if (req.user.id === req.params.id || req.user.isAdmin) {
             next()
         }
@@ -27,7 +60,6 @@ function verifyTokenAndUser(req, res, next) {
             res.status(403).json({ message: "You are not allowed, You Can Update or View Only Your Info" })
         }
     })
-
 }
 
 // verify ll admin
@@ -46,4 +78,6 @@ module.exports = {
     verifyToken,
     verifyTokenAndUser,
     verifyTokenAndAdmin,
+    verifyTokenAndOrderOwner,
+    verifyOrderDetails
 }

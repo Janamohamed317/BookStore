@@ -5,13 +5,14 @@ export interface Author {
     nationality: string;
 }
 
-export interface newAuthor {
+
+export interface NewAuthor {
     fullName: string;
     image?: string;
     nationality: string;
 }
 
-export interface bookAuthor {
+export interface BookAuthor {
     fullName: string;
 }
 

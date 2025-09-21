@@ -2,15 +2,15 @@ import { createContext, useState } from "react";
 import type { ReactNode } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import type { Author, newAuthor } from "../../types/Author";
-import type { newBook } from "../../types/Book";
+import type { Author, NewAuthor } from "../../types/Author";
+import type { NewBook } from "../../types/Book";
 
 type AppContextType = {
     authors: Author[] | undefined;
-    bookData: newBook;
-    setBookData: React.Dispatch<React.SetStateAction<newBook>>;
-    setAuthorData: React.Dispatch<React.SetStateAction<newAuthor>>;
-    authorData: newAuthor;
+    bookData: NewBook;
+    setBookData: React.Dispatch<React.SetStateAction<NewBook>>;
+    setAuthorData: React.Dispatch<React.SetStateAction<NewAuthor>>;
+    authorData: NewAuthor;
     AssignAuthorIdToAddedBook: (firstName: string) => void;
     getAuthors: () => void
 };
@@ -22,16 +22,17 @@ type AppContextProviderProps = {
 };
 
 const AppContextProvider = ({ children }: AppContextProviderProps) => {
-    const [bookData, setBookData] = useState<newBook>({
+    const [bookData, setBookData] = useState<NewBook>({
         title: "",
         author: "",
         description: "",
         cover: "",
         price: 0,
         image: "",
+        quantity: 0
     });
 
-    const [authorData, setAuthorData] = useState<newAuthor>({
+    const [authorData, setAuthorData] = useState<NewAuthor>({
         fullName: "",
         nationality: "",
     });
@@ -48,7 +49,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
     });
 
-    // remove setBookData ????
+    
     const AssignAuthorIdToAddedBook = async (firstName: string) => {
         try {
             const res = await axios.get(

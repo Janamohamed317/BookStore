@@ -7,14 +7,17 @@ export interface Book {
     description: string,
     price: number,
     cover: string,
-    image: string
+    image: string,
+    quantity: number
 }
 
-export interface newBook {
+export interface NewBook {
     title: string,
     author: string,
     description: string,
     cover: string,
     price: number,
-    image: string
+    image: string,
+    quantity: number
+
 }

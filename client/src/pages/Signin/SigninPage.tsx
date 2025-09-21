@@ -1,45 +1,16 @@
 import { useState } from "react";
-import Swal from "sweetalert2";
-import axios from "axios";
 import { useNavigate } from "react-router";
-import { useMutation } from "@tanstack/react-query";
-import type { ErrorResponse } from "../../types/Error";
-import { handleNavigate } from "../../utils/HandleNavigation";
-import type { signin } from "../../types/User";
+import type { Signin } from "../../types/User";
+import useSignin from "../../hooks/Auth/useSignin";
 
-function Signin() {
+function SigninPage() {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState<signin>({
+    const [formData, setFormData] = useState<Signin>({
         email: "",
         password: "",
     });
 
-    const signinMutation = useMutation({
-        mutationFn: async () => {
-            const res = await axios.post("http://localhost:5000/api/auth/login", {
-                email: formData.email,
-                password: formData.password,
-            });
-            return res.data;
-        },
-        onSuccess: (data) => {
-            const token = data.token;
-            localStorage.setItem("token", token);
-
-            const path = handleNavigate(token);
-            navigate(path);
-        },
-        onError: (error: unknown) => {
-            if (axios.isAxiosError<ErrorResponse>(error)) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error Logging in",
-                    text: error.response?.data.message || "Something went wrong",
-                    confirmButtonText: "OK",
-                });
-            }
-        },
-    });
+    const signinMutation = useSignin()
 
     return (
         <div className="flex justify-center items-center h-screen">
@@ -78,7 +49,7 @@ function Signin() {
                 </span>
 
                 <button
-                    onClick={() => signinMutation.mutate()}
+                    onClick={() => signinMutation.mutate(formData)}
                     className="bg-[#a47148] text-[#f5f5dc] rounded-2xl p-2 hover:bg-[#8b5e3c] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Sign in
@@ -98,4 +69,4 @@ function Signin() {
     );
 }
 
-export default Signin;
+export default SigninPage;

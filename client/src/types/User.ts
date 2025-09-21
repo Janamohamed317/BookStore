@@ -1,27 +1,28 @@
-export interface signup {
+export interface Signup {
     email: string;
     username: string;
     password: string;
     confirmPassword: string
 }
 
-export interface signin {
+export interface Signin {
     email: string;
     password: string;
 }
 
 
-export interface resetPassword {
+export interface ResetPassword {
     password: string;
     confirmPassword: string
 }
 
-export interface forgetPassword {
+export interface ForgetPassword {
     email: string
 }
 
-export interface User  {
+export interface User {
     _id: string;
-    name: string;
+    username: string;
     email: string;
+    blocked: boolean,
 };

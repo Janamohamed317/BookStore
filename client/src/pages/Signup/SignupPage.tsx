@@ -1,75 +1,19 @@
 import { useState } from "react";
-import Swal from "sweetalert2";
-import axios from "axios";
+import type { Signup } from "../../types/User";
+import useSignup from "../../hooks/Auth/useSignup";
 import { useNavigate } from "react-router";
-import { useMutation } from "@tanstack/react-query";
-import type { ErrorResponse } from "../../types/Error";
-import type { signup } from "../../types/User";
 
-function Signup() {
+function SignupPage() {
     const navigate = useNavigate();
 
-    const [formData, setFormData] = useState<signup>({
+    const [formData, setFormData] = useState<Signup>({
         email: "",
         username: "",
         password: "",
         confirmPassword: "",
     });
 
-    const validateData = (formData: signup) => {
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!emailRegex.test(formData.email)) {
-            Swal.fire({
-                icon: "error",
-                title: "Invalid Email Format",
-                text: "Email must match format email@gm.com",
-            });
-            return false;
-        }
-        if (formData.password !== formData.confirmPassword) {
-            Swal.fire({
-                icon: "error",
-                title: "Passwords don't match",
-                text: "Passwords should match",
-            });
-            return false;
-        }
-        return true;
-    };
-
-    const signupMutation = useMutation({
-        mutationFn: async () => {
-            if (validateData(formData)) {
-
-                const res = await axios.post("http://localhost:5000/api/auth/register", {
-                    email: formData.email,
-                    username: formData.username,
-                    password: formData.password,
-                });
-                return res.data;
-            }
-        },
-        onSuccess: (data) => {
-            localStorage.setItem("token", data.token);
-            Swal.fire({
-                icon: "success",
-                title: "Signup Successful",
-                text: "Welcome to Bookstore!",
-                confirmButtonText: "OK",
-            });
-            navigate("/");
-        },
-        onError: (error: unknown) => {
-            if (axios.isAxiosError<ErrorResponse>(error)) {
-                Swal.fire({
-                    icon: "warning",
-                    title: "Signup Failed",
-                    text: error.response?.data.message || "Something went wrong",
-                    confirmButtonText: "OK",
-                });
-            }
-        },
-    });
+    const signupMutation = useSignup()
 
     return (
         <div className="flex justify-center items-center h-dvh">
@@ -118,7 +62,7 @@ function Signup() {
                 />
 
                 <button
-                    onClick={() => signupMutation.mutate()}
+                    onClick={() => signupMutation.mutate(formData)}
                     className="bg-[#a47148] text-[#f5f5dc] rounded-2xl p-2 hover:bg-[#8b5e3c] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Sign Up
@@ -138,4 +82,4 @@ function Signup() {
     );
 }
 
-export default Signup;
+export default SignupPage;

@@ -1,19 +1,20 @@
 import axios from "axios"
 import { useContext, useEffect } from "react"
 import Swal from "sweetalert2"
-import type { ErrorResponse } from "../../types/Error"
+import type { Error } from "../../types/Error"
 import { AppContext } from "../Context/AppContext"
 import { useMutation } from "@tanstack/react-query"
+import { addNewAuthor } from "../../services/AuthorsServices"
+import useAddAuthor from "../../hooks/authors/useAddAuthor"
 
 function AddAuthor() {
     const context = useContext(AppContext);
-    const token = localStorage.getItem("token")
 
     if (!context) {
         throw new Error("Authors must be used within an AppContextProvider");
     }
 
-    const { setAuthorData, authorData, getAuthors } = context;
+    const { setAuthorData, authorData } = context;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -27,41 +28,7 @@ function AddAuthor() {
         });
     }, []);
 
-    const addAuthor = useMutation({
-        mutationFn: async () => {
-            await axios.post("http://localhost:5000/api/authors/add", {
-                fullName: authorData.fullName,
-                nationality: authorData.nationality,
-            }, {
-                headers: {
-                    token: token
-                }
-            })
-        },
-        onSuccess: () => {
-            Swal.fire({
-                icon: 'success',
-                title: 'Author is Added Successfully',
-                confirmButtonText: 'OK',
-            });
-            setAuthorData({
-                fullName: "",
-                nationality: ""
-            })
-            getAuthors()
-
-        },
-        onError: (error) => {
-            if (axios.isAxiosError<ErrorResponse>(error)) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'There is an error',
-                    text: error.response?.data.message,
-                    confirmButtonText: 'OK',
-                });
-            }
-        }
-    })
+    const addAuthor = useAddAuthor(authorData, setAuthorData)
 
     return (
         <div className="flex justify-center items-center gap-3 mt-6 bg-[#3e2723]/90 p-4 rounded-lg shadow-md">

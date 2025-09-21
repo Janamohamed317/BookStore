@@ -1,21 +1,12 @@
 import { useState } from "react";
 import BookCard from "../../components/BookCard/BookCard";
 import { pages } from "../../assets/assets";
-import type { Book } from "../../types/Book";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import useBooksPerPage from "../../hooks/books/useBooksPerPage";
 
 function DisplayBooks() {
     const [pageNumber, setPageNumber] = useState<number>(1)
 
-    const { data, isLoading, error } = useQuery<Book[]>({
-        queryKey: ["books", pageNumber],
-        queryFn: async () => {
-            const res = await axios.get(`http://localhost:5000/api/books?pageNumber=${pageNumber}`);
-            return res.data
-        },
-        refetchOnWindowFocus: false,
-    });
+    const { data, isLoading, error } = useBooksPerPage(pageNumber)
 
     if (isLoading) {
         return <p className="text-center text-[#f5f5dc]">Loading books...</p>;

@@ -32,5 +32,9 @@ export const sideBarItems: SideBarItem[] = [
     {
         label: "Users",
         id: 3
+    },
+    {
+        label: "Orders",
+        id: 4
     }
 ]

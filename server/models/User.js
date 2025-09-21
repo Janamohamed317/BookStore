@@ -34,13 +34,17 @@ const userSchema = new mongoose.Schema(
         {
             type: Boolean,
             default: false,
+        },
+        blocked:
+        {
+            type: Boolean,
+            default: false,
         }
     },
     { timestamps: true }
 )
 
-userSchema.methods.generateToken = function()
-{
+userSchema.methods.generateToken = function () {
     return jwt.sign({ id: this._id, isAdmin: this.isAdmin }, process.env.JWT_SECRET_KEY)
 }
 
@@ -73,6 +77,7 @@ function ValidateUpdateUser(obj) {
         email: Joi.string().trim().min(10).max(50),
         username: Joi.string().trim().min(2).max(30),
         password: Joi.string().trim().min(6),
+        blocked: Joi.boolean()
     });
 
     return schema.validate(obj);

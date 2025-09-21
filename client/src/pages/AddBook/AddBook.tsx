@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../components/Context/AppContext';
 import axios from 'axios';
-import type { ErrorResponse } from "../../types/Error"
+import type { Error } from "../../types/Error"
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router';
-import { UploadImg } from '../../utils/UploadImg';
 import { resetBookData } from '../../utils/ResetBookData';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { addNewBook } from '../../services/BooksServices';
+import useAddBook from '../../hooks/books/useAddBook';
 
 function AddBook() {
     const context = useContext(AppContext);
@@ -15,9 +16,6 @@ function AddBook() {
     }
 
     const { authors, AssignAuthorIdToAddedBook, setBookData, bookData } = context;
-    const queryClient = useQueryClient();
-    const navigate = useNavigate()
-    const token = localStorage.getItem("token")
     const [file, setFile] = useState<File | null>(null);
 
 
@@ -25,45 +23,7 @@ function AddBook() {
         resetBookData(setBookData)
     }, []);
 
-
-
-    const addBook = useMutation({
-        mutationFn: async () => {
-            const res = await axios.post("http://localhost:5000/api/books/add", {
-                title: bookData.title,
-                author: bookData.author,
-                description: bookData.description,
-                cover: bookData.cover,
-                price: bookData.price,
-                // quantity: 50
-            }, {
-                headers: {
-                    token: token
-                }
-            })
-            await UploadImg(res.data, file)
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["books"] });
-            navigate("/admin")
-            resetBookData(setBookData)
-            Swal.fire({
-                icon: 'success',
-                text: "Book Created",
-                confirmButtonText: 'OK',
-            });
-        },
-        onError: (error) => {
-            if (axios.isAxiosError<ErrorResponse>(error)) {
-                Swal.fire({
-                    icon: "error",
-                    title: "There is an error",
-                    text: error.response?.data.message,
-                    confirmButtonText: "OK",
-                });
-            }
-        },
-    })
+    const addBook = useAddBook(bookData, file, setBookData)
 
     return (
         <div className="flex justify-center items-center h-screen">

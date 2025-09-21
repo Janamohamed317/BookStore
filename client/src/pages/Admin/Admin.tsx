@@ -3,11 +3,12 @@ import Authors from "../Authors/Authors";
 import SideBar from "../../components/SideBar/SideBar";
 import Users from "../Users/Users";
 import AdminBooks from "../../components/AdminBooks/AdminBooks";
+import Orders from "../Orders/Orders";
 
 function Admin() {
 
     const [activeTab, setActiveTab] = useState<string>("Books");
-    
+
     const renderContent = () => {
         switch (activeTab) {
             case "Authors":
@@ -16,6 +17,8 @@ function Admin() {
                 return <AdminBooks />;
             case "Users":
                 return <Users />
+            case "Orders":
+                return <Orders />
             default:
                 return <Authors />;
         }

@@ -3,16 +3,18 @@ import './App.css'
 import DisplayBooks from './pages/DisplayBooks/DisplayBooks'
 import Home from './pages/Home/Home'
 import EditBook from './pages/EditBook/EditBook'
-import Authors from './pages/Authors/Authors'
 import Admin from './pages/Admin/Admin'
-import Signup from './pages/Signup/Signup'
-import Signin from './pages/Signin/Signin'
+import Signup from './pages/Signup/SignupPage'
+import Signin from './pages/Signin/SigninPage'
 import ProtectedRoutes from './utils/ProtectedRoutes'
 import AddBook from './pages/AddBook/AddBook'
-import ResetPassword from './pages/ResetPassword/ResetPassword'
+import ResetPassword from './pages/ResetPassword/ForgotPassword'
 import ResetPasswordForm from './pages/ResetPasswordForm/ResetPasswordForm'
 import EditAuthor from './pages/EditAuthor/EditAuthor'
 import ProtectedAdminRoute from './utils/ProtectedAdminRoute'
+import UserProfile from './pages/UserProfile/UserProfile'
+import OrderInfo from './pages/OrderInfo/OrderInfo'
+import Cart from './pages/Cart/Cart'
 
 function App() {
   return (
@@ -29,6 +31,23 @@ function App() {
           </ProtectedRoutes>
         } />
 
+        <Route path='/user' element={
+          <ProtectedRoutes>
+            <UserProfile />
+          </ProtectedRoutes>
+        } />
+
+        <Route path='/cart' element={
+          <ProtectedRoutes>
+            <Cart />
+          </ProtectedRoutes>
+        } />
+
+        <Route path='/user/orders/:orderId' element={
+          <ProtectedRoutes>
+            <OrderInfo />
+          </ProtectedRoutes>
+        } />
         <Route path="/admin" element={<ProtectedAdminRoute />}>
           <Route index element={<Admin />} />
           <Route path="EditAuthor" element={<EditAuthor />} />
