@@ -14,7 +14,7 @@ const Cart = () => {
     const grandTotal = calculateTotalPrice(cartItems)
 
 
-    const makeOrder = useMakeOrder(cartItems)
+    const makeOrder = useMakeOrder(cartItems, clearCart)
 
     return (
         <div className="p-6">

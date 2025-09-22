@@ -1,13 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../components/Context/AppContext';
-import axios from 'axios';
-import type { Error } from "../../types/Error"
-import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router';
-import { resetBookData } from '../../utils/ResetBookData';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addNewBook } from '../../services/BooksServices';
 import useAddBook from '../../hooks/books/useAddBook';
+import { resetBookData } from '../../utils/ResetBookData';
+import Swal from 'sweetalert2';
 
 function AddBook() {
     const context = useContext(AppContext);
@@ -18,12 +13,20 @@ function AddBook() {
     const { authors, AssignAuthorIdToAddedBook, setBookData, bookData } = context;
     const [file, setFile] = useState<File | null>(null);
 
-
     useEffect(() => {
         resetBookData(setBookData)
     }, []);
 
     const addBook = useAddBook(bookData, file, setBookData)
+    if (addBook.isPending) {
+        Swal.fire({
+            icon: "info",
+            title: "Adding Book",
+            text: "Please wait...",
+            allowOutsideClick: false,
+            showConfirmButton: false
+        });
+    }
 
     return (
         <div className="flex justify-center items-center h-screen">

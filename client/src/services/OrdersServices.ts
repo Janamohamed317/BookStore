@@ -49,5 +49,5 @@ export const newOrder = async (orderBooks: OrderedBooks[]) => {
 }
 
 export const calculateTotalPrice = (cartItems: OrderedBooks[]) => {
-    return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 30)
 }

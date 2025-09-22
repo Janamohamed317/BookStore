@@ -11,7 +11,12 @@ export const pages: page[] = [
     {
         id: 2,
         page: 2,
+    },
+    {
+        id: 3,
+        page: 3,
     }
+
 
 ];
 

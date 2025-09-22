@@ -3,8 +3,10 @@ import type { OrderedBooks } from '../../types/Order';
 import { newOrder } from '../../services/OrdersServices';
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 
-const useMakeOrder = (cartItems: OrderedBooks[]) => {
+const useMakeOrder = (cartItems: OrderedBooks[], clearCart: () => void) => {
+    const navigate = useNavigate()
     return useMutation({
         mutationKey: ["order", cartItems],
         mutationFn: () => newOrder(cartItems),
@@ -14,6 +16,8 @@ const useMakeOrder = (cartItems: OrderedBooks[]) => {
                 text: "Order Placed Successfully",
                 confirmButtonText: "OK",
             });
+            navigate('/')
+            clearCart()
         },
         onError: (error) => {
             if (axios.isAxiosError<Error>(error)) {

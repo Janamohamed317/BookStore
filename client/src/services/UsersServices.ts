@@ -1,5 +1,5 @@
 import axios from "axios"
-import type { Signin, Signup, User } from "../types/User"
+import type { Signin, Signup, UpdatedUser, User } from "../types/User"
 import { validateData } from "../utils/SignUpValidation"
 
 const token = localStorage.getItem("token")
@@ -61,7 +61,6 @@ export const signin = async (formData: Signin) => {
     return res.data;
 }
 
-
 export const signup = async (formData: Signup) => {
     if (validateData(formData)) {
         const res = await axios.post("http://localhost:5000/api/auth/register", {
@@ -73,4 +72,39 @@ export const signup = async (formData: Signup) => {
     }
 }
 
+export const resetPassword = async (id: string, password: string, token: string) => {
+    return await axios.post(
+        `http://localhost:5000/api/password/reset-password/${id}/${token}`,
+        { password }
+    );
+}
 
+export const verifyLink = async (id: string, setInvalid: any, token: string) => {
+    try {
+        await axios.get(`http://localhost:5000/api/password/reset-password/${id}/${token}`);
+    } catch {
+        setInvalid(true)
+        console.log(token);
+
+    }
+}
+
+export const forgetPassword = async (email: string) => {
+    return await axios.post(
+        "http://localhost:5000/api/password/forgot-password",
+        { email }
+    );
+}
+
+
+export const updateUserInfo = async (updatedData: UpdatedUser) => {
+    return await axios.put(`http://localhost:5000/api/users/edit/${userId}`,
+        updatedData,    
+        {
+            headers:
+            {
+                token: token
+            }
+        }
+    )
+}

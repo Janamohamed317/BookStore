@@ -11,18 +11,14 @@ export interface Signin {
 }
 
 
-export interface ResetPassword {
-    password: string;
-    confirmPassword: string
-}
-
-export interface ForgetPassword {
-    email: string
-}
-
 export interface User {
     _id: string;
     username: string;
     email: string;
     blocked: boolean,
+};
+
+export interface UpdatedUser {
+    username: string | any
+    email: string | any
 };

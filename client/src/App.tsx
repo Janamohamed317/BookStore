@@ -8,13 +8,14 @@ import Signup from './pages/Signup/SignupPage'
 import Signin from './pages/Signin/SigninPage'
 import ProtectedRoutes from './utils/ProtectedRoutes'
 import AddBook from './pages/AddBook/AddBook'
-import ResetPassword from './pages/ResetPassword/ForgotPassword'
+import ResetPassword from './pages/ForgotPasswordForm/ForgotPasswordForm'
 import ResetPasswordForm from './pages/ResetPasswordForm/ResetPasswordForm'
 import EditAuthor from './pages/EditAuthor/EditAuthor'
 import ProtectedAdminRoute from './utils/ProtectedAdminRoute'
 import UserProfile from './pages/UserProfile/UserProfile'
 import OrderInfo from './pages/OrderInfo/OrderInfo'
 import Cart from './pages/Cart/Cart'
+import UserEdit from './pages/UserEdit/UserEdit'
 
 function App() {
   return (
@@ -31,9 +32,28 @@ function App() {
           </ProtectedRoutes>
         } />
 
+
+        <Route path='/books' element={
+          <ProtectedRoutes>
+            <DisplayBooks />
+          </ProtectedRoutes>
+        } />
+
         <Route path='/user' element={
           <ProtectedRoutes>
             <UserProfile />
+          </ProtectedRoutes>
+        } />
+
+        <Route path='/user/edit' element={
+          <ProtectedRoutes>
+            <UserEdit />
+          </ProtectedRoutes>
+        } />
+
+        <Route path='/user/orders/:orderId' element={
+          <ProtectedRoutes>
+            <OrderInfo />
           </ProtectedRoutes>
         } />
 
@@ -43,11 +63,6 @@ function App() {
           </ProtectedRoutes>
         } />
 
-        <Route path='/user/orders/:orderId' element={
-          <ProtectedRoutes>
-            <OrderInfo />
-          </ProtectedRoutes>
-        } />
         <Route path="/admin" element={<ProtectedAdminRoute />}>
           <Route index element={<Admin />} />
           <Route path="EditAuthor" element={<EditAuthor />} />
@@ -55,11 +70,6 @@ function App() {
           <Route path='EditBook' element={<EditBook />} />
         </Route>
 
-        <Route path='/books' element={
-          <ProtectedRoutes>
-            <DisplayBooks />
-          </ProtectedRoutes>
-        } />
 
       </Routes >
     </>

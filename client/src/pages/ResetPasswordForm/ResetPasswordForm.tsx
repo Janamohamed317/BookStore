@@ -1,52 +1,19 @@
-import axios from "axios";
+
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
-import Swal from "sweetalert2";
-import { useMutation } from "@tanstack/react-query";
+import { useParams } from "react-router";
+import useResetPassword from "../../hooks/Auth/useResetPassword";
+import { verifyLink } from "../../services/UsersServices";
 
 function ResetPasswordForm() {
     const { id, token } = useParams<{ id: string; token: string }>();
     const [password, setPassword] = useState<string>("");
     const [invalid, setInvalid] = useState<boolean>(false);
-    const navigate = useNavigate();
 
     useEffect(() => {
-        const verifyLink = async () => {
-            try {
-                await axios.get(`http://localhost:5000/api/password/reset-password/${id}/${token}`);
-            } catch {
-                setInvalid(true)
-            }
-        };
-        verifyLink();
+        verifyLink(id!, setInvalid, token!);
     }, [id, token]);
 
-    const resetPasswordMutation = useMutation({
-        mutationFn: async () => {
-            return await axios.post(
-                `http://localhost:5000/api/password/reset-password/${id}/${token}`,
-                { password }
-            );
-        },
-        onSuccess: () => {
-            Swal.fire({
-                icon: "success",
-                text: "Your password has been reset successfully!",
-                confirmButtonText: "OK",
-            });
-            navigate("/login");
-        },
-        onError: (error: unknown) => {
-            if (axios.isAxiosError(error)) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: error.response?.data?.message || "Reset link is invalid or expired.",
-                    confirmButtonText: "OK",
-                });
-            }
-        },
-    });
+    const resetPasswordMutation = useResetPassword(password, id!,token!)
 
     if (invalid === true) {
         return <p>This reset link is invalid or has expired. </ p>
@@ -74,6 +41,7 @@ function ResetPasswordForm() {
                     onClick={() => resetPasswordMutation.mutate()}
                     className="bg-[#a47148] text-[#f5f5dc] p-2 rounded hover:bg-[#8b5e3c] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
+                    Reset Password
                 </button>
             </div>
         </div>

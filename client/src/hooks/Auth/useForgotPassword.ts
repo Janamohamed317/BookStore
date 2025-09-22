@@ -1,28 +1,28 @@
 import { useMutation } from '@tanstack/react-query';
-import { resetPassword } from '../../services/UsersServices';
-import axios from 'axios';
 import Swal from 'sweetalert2';
+import axios from 'axios';
+import { forgetPassword } from '../../services/UsersServices';
 import { useNavigate } from 'react-router';
 
-const useResetPassword = (password: string, id: string, token: string) => {
-    const navigate = useNavigate();
-
+const useForgotPassword = () => {
+    const navigate = useNavigate()
     return useMutation({
-        mutationFn: () => resetPassword(id, password, token),
+        mutationFn: forgetPassword,
         onSuccess: () => {
             Swal.fire({
                 icon: "success",
-                text: "Your password has been reset successfully!",
+                text: "Password reset link has been sent to your email.",
                 confirmButtonText: "OK",
             });
-            navigate("/signin");
+            navigate('/signin')
+
         },
         onError: (error: unknown) => {
             if (axios.isAxiosError(error)) {
                 Swal.fire({
                     icon: "error",
                     title: "Error",
-                    text: error.response?.data?.message || "Reset link is invalid or expired.",
+                    text: error.response?.data?.message,
                     confirmButtonText: "OK",
                 });
             }
@@ -30,4 +30,4 @@ const useResetPassword = (password: string, id: string, token: string) => {
     });
 }
 
-export default useResetPassword
+export default useForgotPassword

@@ -1,36 +1,11 @@
-import axios from "axios";
 import { useState } from "react";
 import Swal from "sweetalert2";
-import { useMutation } from "@tanstack/react-query";
+import useForgotPassword from "../../hooks/Auth/useForgotPassword";
 
-function ResetPassword() {
+function ForgotPasswordForm() {
   const [email, setEmail] = useState<string>("");
 
-  const resetPassword = useMutation({
-    mutationFn: async () => {
-      return await axios.post(
-        "http://localhost:5000/api/password/forgot-password",
-        { email }
-      );
-    },
-    onSuccess: () => {
-      Swal.fire({
-        icon: "success",
-        text: "Password reset link has been sent to your email.",
-        confirmButtonText: "OK",
-      });
-    },
-    onError: (error: unknown) => {
-      if (axios.isAxiosError(error)) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.response?.data?.message,
-          confirmButtonText: "OK",
-        });
-      }
-    },
-  });
+  const forgetPassword = useForgotPassword()
 
   const handleEmailSubmission = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
@@ -43,8 +18,7 @@ function ResetPassword() {
       });
       return;
     }
-
-    resetPassword.mutate();
+    forgetPassword.mutate(email);
   };
 
   return (
@@ -77,4 +51,4 @@ function ResetPassword() {
   );
 }
 
-export default ResetPassword;
+export default ForgotPasswordForm;

@@ -1,11 +1,7 @@
-import axios from "axios"
 import { useContext, useEffect } from "react"
-import Swal from "sweetalert2"
-import type { Error } from "../../types/Error"
 import { AppContext } from "../Context/AppContext"
-import { useMutation } from "@tanstack/react-query"
-import { addNewAuthor } from "../../services/AuthorsServices"
 import useAddAuthor from "../../hooks/authors/useAddAuthor"
+import Swal from "sweetalert2";
 
 function AddAuthor() {
     const context = useContext(AppContext);
@@ -29,6 +25,15 @@ function AddAuthor() {
     }, []);
 
     const addAuthor = useAddAuthor(authorData, setAuthorData)
+    if (addAuthor.isPending) {
+        Swal.fire({
+            icon: "info",
+            title: "Adding Author",
+            text: "Please wait...",
+            allowOutsideClick: false,
+            showConfirmButton: false
+        });
+    }
 
     return (
         <div className="flex justify-center items-center gap-3 mt-6 bg-[#3e2723]/90 p-4 rounded-lg shadow-md">

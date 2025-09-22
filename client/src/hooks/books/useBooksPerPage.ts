@@ -4,9 +4,9 @@ import { getBooksPerPage } from '../../services/BooksServices';
 
 const useBooksPerPage = (pageNumber: number) => {
     return useQuery<Book[]>({
-        queryKey: ["books", pageNumber],
+        queryKey: ["booksPerPage", pageNumber],
         queryFn: () => getBooksPerPage(pageNumber),
-        refetchOnWindowFocus: false,
+        refetchOnWindowFocus: false ,
     });
 }
 

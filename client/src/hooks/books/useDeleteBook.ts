@@ -15,7 +15,8 @@ const useDeleteBook = () => {
                 text: "The Book has been removed.",
                 confirmButtonText: "OK",
             });
-            queryClient.invalidateQueries({ queryKey: ["books"] })
+            // await queryClient.invalidateQueries({ queryKey: ["books"] })
+            await queryClient.refetchQueries({ queryKey: ["books"] });
         },
         onError: (error) => {
             if (axios.isAxiosError<Error>(error)) {
