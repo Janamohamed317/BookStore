@@ -15,7 +15,6 @@ function EditAuthor() {
     const location = useLocation();
     const { author } = location.state;
 
-
     useEffect(() => {
         setAuthorData({
             fullName: author.fullName,
@@ -23,11 +22,11 @@ function EditAuthor() {
         });
     }, [author]);
 
-    const editAuthor = useUpdateAuthor(authorData, author)
+    const editAuthor = useUpdateAuthor(authorData, author);
 
     return (
         <div className="flex justify-center items-center h-screen">
-            <div className="flex flex-col gap-4 w-80 bg-[#3e2723] p-6 rounded-xl shadow-md">
+            <div className="flex flex-col gap-4 w-96 bg-[#2B2118]/90 backdrop-blur-md border border-[#6C584C]/30 p-6 rounded-2xl shadow-lg">
                 <p className="font-bold text-center text-[#f5f5dc] text-lg">
                     Edit Author
                 </p>
@@ -38,7 +37,7 @@ function EditAuthor() {
                 <input
                     id="authorName"
                     type="text"
-                    className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded"
+                    className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded focus:ring-2 focus:ring-[#a47148] outline-none"
                     placeholder="Enter Author Name"
                     value={authorData.fullName}
                     onChange={(e) =>
@@ -52,7 +51,7 @@ function EditAuthor() {
                 <input
                     id="authorNationality"
                     type="text"
-                    className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded"
+                    className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded focus:ring-2 focus:ring-[#a47148] outline-none"
                     placeholder="Enter Author Nationality"
                     value={authorData.nationality}
                     onChange={(e) =>
@@ -62,7 +61,7 @@ function EditAuthor() {
 
                 <button
                     onClick={() => editAuthor.mutate()}
-                    className="bg-[#a47148] text-[#f5f5dc] p-2 rounded hover:bg-[#8b5e3c] transition cursor-pointer"
+                    className="bg-[#a47148] hover:bg-[#8b5e3c] text-[#f5f5dc] p-2 rounded-lg font-semibold transition cursor-pointer"
                 >
                     Update Author
                 </button>

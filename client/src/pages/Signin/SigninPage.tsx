@@ -10,14 +10,15 @@ function SigninPage() {
         password: "",
     });
 
-    const signinMutation = useSignin()
+    const signinMutation = useSignin();
 
     return (
-        <div className="flex justify-center items-center h-screen">
-            <div className="flex flex-col justify-start gap-5 bg-[#3e2723] p-6 rounded-2xl w-80 shadow-md">
-                <p className="text-center text-[#f5f5dc] font-bold text-xl">Sign In</p>
+        <div className="flex justify-center items-center h-screen ">
+            <div className="flex flex-col justify-start gap-5 bg-[#2B2118]/30 backdrop-blur-md p-6 rounded-2xl w-96 
+            border border-[#6C584C]/90">
+                <p className="text-center text-[#E6D5C3] font-bold text-2xl">Sign In</p>
 
-                <label htmlFor="email" className="text-[#f5f5dc]">
+                <label htmlFor="email" className="text-[#F5EDE0]">
                     Email:
                 </label>
                 <input
@@ -26,10 +27,10 @@ function SigninPage() {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="Enter your email"
-                    className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded-2xl"
+                    className="bg-[#F5EDE0] text-[#2B2118] p-2 rounded-lg focus:outline-none"
                 />
 
-                <label htmlFor="password" className="text-[#f5f5dc]">
+                <label htmlFor="password" className="text-[#F5EDE0]">
                     Password:
                 </label>
                 <input
@@ -38,11 +39,11 @@ function SigninPage() {
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     placeholder="Enter your password"
-                    className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded-2xl"
+                    className="bg-[#F5EDE0] text-[#2B2118] p-2 rounded-lg focus:outline-none"
                 />
 
                 <span
-                    className="self-end cursor-pointer text-[#a47148] hover:underline"
+                    className="self-end cursor-pointer text-[#D4A373] hover:underline"
                     onClick={() => navigate("/resetPassword")}
                 >
                     Forgot Password?
@@ -50,15 +51,16 @@ function SigninPage() {
 
                 <button
                     onClick={() => signinMutation.mutate(formData)}
-                    className="bg-[#a47148] text-[#f5f5dc] rounded-2xl p-2 hover:bg-[#8b5e3c] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={!formData.email || !formData.password}
+                    className="bg-[#D4A373] text-[#2B2118] font-semibold rounded-lg p-2 hover:bg-[#E5B185] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Sign in
                 </button>
 
-                <span className="text-center text-[#f5f5dc]">
-                    Doesn't have an account?{" "}
+                <span className="text-center text-[#F5EDE0]">
+                    Don't have an account?{" "}
                     <span
-                        className="underline cursor-pointer text-[#a47148]"
+                        className="underline cursor-pointer text-[#D4A373] hover:text-[#E5B185]"
                         onClick={() => navigate("/signup")}
                     >
                         Sign up

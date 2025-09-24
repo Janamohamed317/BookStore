@@ -4,11 +4,12 @@ import { getUserInfo } from "../../services/UsersServices"
 
 
 const useGetUserInfo = () => {
+  const userId = localStorage.getItem("userId") 
   return useQuery<User>({
-        queryKey: ["user"],
-        queryFn: getUserInfo,
-        refetchOnWindowFocus: false
-    })
+    queryKey: ["user", userId],
+    queryFn: getUserInfo,
+    refetchOnWindowFocus: false
+  })
 
 }
 

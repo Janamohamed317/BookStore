@@ -2,7 +2,9 @@
 
 
 #root {
-  background-color: rgb(49, 36, 1);
+  background: linear-gradient(to top right,
+      #1A2634,
+      #2B2118);
   min-height: 100vh;
   height: auto;
   margin: 0;

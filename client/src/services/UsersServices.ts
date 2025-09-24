@@ -2,10 +2,10 @@ import axios from "axios"
 import type { Signin, Signup, UpdatedUser, User } from "../types/User"
 import { validateData } from "../utils/SignUpValidation"
 
-const token = localStorage.getItem("token")
-const userId = localStorage.getItem("userId")
+
 
 export const deleteUser = async (userId: string) => {
+    const token = localStorage.getItem("token")
     await axios.delete(`http://localhost:5000/api/users/remove/${userId}`,
         {
             headers:
@@ -17,22 +17,25 @@ export const deleteUser = async (userId: string) => {
 }
 
 export const blockOrUnblockUser = async (user: User) => {
+    const token = localStorage.getItem("token")
     if (user.blocked) {
-        await axios.put(`http://localhost:5000/api/users/unblock/${userId}`,
+        await axios.put(`http://localhost:5000/api/users/unblock/${user._id}`,
             {},
             { headers: { token } }
         )
     }
     else {
-        await axios.put(`http://localhost:5000/api/users/block/${userId}`,
+        await axios.put(`http://localhost:5000/api/users/block/${user._id}`,
             {},
             { headers: { token } }
         )
     }
 }
 
-export const fetchUsers = async () => {
-    const { data } = await axios.get<User[]>("http://localhost:5000/api/users",
+export const fetchUsers = async (blocked: string) => {
+    const token = localStorage.getItem("token")
+    const url = blocked === " " ? "http://localhost:5000/api/users" : `http://localhost:5000/api/users?blocked=${blocked}`
+    const { data } = await axios.get<User[]>(url,
         {
             headers:
             {
@@ -44,6 +47,8 @@ export const fetchUsers = async () => {
 };
 
 export const getUserInfo = async () => {
+    const token = localStorage.getItem("token")
+    const userId = localStorage.getItem("userId")
     const res = await axios.get(`http://localhost:5000/api/users/${userId}`
         , {
             headers: {
@@ -52,6 +57,21 @@ export const getUserInfo = async () => {
         })
     return res.data
 }
+
+export const updateUserInfo = async (updatedData: UpdatedUser) => {
+    const token = localStorage.getItem("token")
+    const userId = localStorage.getItem("userId")
+    return await axios.put(`http://localhost:5000/api/users/edit/${userId}`,
+        updatedData,
+        {
+            headers:
+            {
+                token: token
+            }
+        }
+    )
+}
+
 
 export const signin = async (formData: Signin) => {
     const res = await axios.post("http://localhost:5000/api/auth/login", {
@@ -96,15 +116,13 @@ export const forgetPassword = async (email: string) => {
     );
 }
 
-
-export const updateUserInfo = async (updatedData: UpdatedUser) => {
-    return await axios.put(`http://localhost:5000/api/users/edit/${userId}`,
-        updatedData,    
-        {
-            headers:
-            {
-                token: token
-            }
-        }
-    )
+export const searchForUser = (searchedUser: string, data?: User[]) => {
+    if (!data) {
+        return []
+    }
+    if (searchedUser.trim() === "") {
+        return data
+    }
+    searchedUser.toLowerCase()
+    return data.filter((user) => user.username.toLowerCase().includes(`${searchedUser}`))
 }

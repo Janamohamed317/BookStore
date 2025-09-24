@@ -1,62 +1,61 @@
-import { useContext } from "react"
+import { useContext, useState } from "react";
 import { AppContext } from "../Context/AppContext";
 import { useNavigate } from "react-router";
 import type { Author } from "../../types/Author";
 import useDeleteAuthor from "../../hooks/authors/useDeleteAuthor";
-
-
+import Search from "../Search/Search";
+import { searchForAuthor } from "../../services/AuthorsServices";
 
 function GetAuthors() {
     const context = useContext(AppContext);
-    const navigate = useNavigate()
     if (!context) {
-        throw new Error("DisplayBooks must be used within an AppContextProvider");
+        throw new Error("useAppContext must be used within an AppContextProvider");
     }
+    const deleteAuthor = useDeleteAuthor();
     const { authors } = context;
 
+    const [searchedItem, setSearchedItem] = useState("");
+    const FilteredData = searchForAuthor(searchedItem, authors);
+
+    const navigate = useNavigate();
+
     const NavigateToEditAuthor = (author: Author) => {
-        navigate('EditAuthor', {
+        navigate("EditAuthor", {
             state: {
                 author: author,
-            }
-        })
-    }
-
-
-    const deleteAuthor = useDeleteAuthor()
-
+            },
+        });
+    };
 
     return (
-        <div className="mt-6 flex flex-col gap-3">
-            {authors?.map((author) => (
+        <div className="mt-6 flex flex-col gap-4">
+            <Search sendDataToParent={setSearchedItem} />
+            {FilteredData?.map((author) => (
                 <div
                     key={author._id}
-                    className="flex justify-between items-center p-3 bg-[#f5f5dc] rounded-lg shadow-sm"
+                    className="flex justify-between items-center p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 shadow-md"
                 >
-                    <span className="text-[#3e2723] font-medium">
-                        {author.fullName}
-                    </span>
+                    <span className="text-white font-medium">{author.fullName}</span>
 
                     <div className="flex gap-3">
                         <button
-                            className="bg-[#7b2d26] text-[#f5f5dc] px-3 py-1 rounded-lg hover:bg-[#5c1f19] transition cursor-pointer"
+                            className="cursor-pointer bg-red-800 hover:bg-red-900 text-white px-4 py-2 rounded-lg font-medium transition"
                             onClick={() => deleteAuthor.mutate(author._id)}
                         >
                             Delete
                         </button>
 
                         <button
-                            className="bg-[#a47148] text-[#f5f5dc] px-3 py-1 rounded-lg hover:bg-[#8b5e3c] transition cursor-pointer"
+                            className="cursor-pointer bg-[#a47148] hover:bg-[#8b5e3c] text-white px-4 py-2 rounded-lg font-semibold transition"
                             onClick={() => NavigateToEditAuthor(author)}
                         >
                             Edit
                         </button>
                     </div>
                 </div>
-            ))
-            }
-        </div >
-    )
+            ))}
+        </div>
+    );
 }
 
-export default GetAuthors
+export default GetAuthors;

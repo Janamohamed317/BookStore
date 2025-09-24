@@ -1,5 +1,6 @@
 const express = require("express");
-const { verifyTokenAndAdmin, verifyTokenAndUser, verifyToken, verifyTokenAndOrderOwner, verifyOrderDetails } = require("../middlewares/verifyToken")
+const { verifyTokenAndAdmin, verifyTokenAndUser, verifyToken, verifyTokenAndOrderOwner,
+    verifyOrderDetails, verifyOrderConfirmation } = require("../middlewares/verifyToken")
 const { deleteOrder, getOrderByOrderId, getOrdersForUser,
     getAllOrders, makeOrder, confirmOrder } = require("..//controllers/orderController")
 
@@ -21,7 +22,7 @@ router.delete("/remove/:id", verifyTokenAndUser, deleteOrder)
 router.post("/newOrder", verifyToken, makeOrder)
 
 // confirm order
-router.put("/confirmOrder/:id", verifyTokenAndAdmin, confirmOrder)
+router.put("/confirmOrder/:id", verifyOrderConfirmation, confirmOrder)
 
 module.exports = router
 

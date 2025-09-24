@@ -6,11 +6,11 @@ import DisplayBooks from "../DisplayBooks/DisplayBooks"
 function Home() {
 
     return (
-        <>
+        <div className="h-full">
             <Navbar />
             <About />
             <DisplayBooks />
-        </>
+        </div>
     )
 }
 

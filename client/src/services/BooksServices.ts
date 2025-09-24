@@ -39,7 +39,7 @@ export const addNewBook = async (bookData: NewBook, file: File | null) => {
         description: bookData.description,
         cover: bookData.cover,
         price: bookData.price,
-        quantity: 50
+        quantity: bookData.quantity
     }, {
         headers: {
             token: token
@@ -52,3 +52,12 @@ export const getBooksPerPage = async (pageNumber: number) => {
     const res = await axios.get(`http://localhost:5000/api/books?pageNumber=${pageNumber}`);
     return res.data
 }
+
+export const searchForBook = (searchedBook: string, data: Book[]) => {
+    if (!searchedBook.trim()) {
+        return data;
+    }
+    return data.filter((book) =>
+        book.title.toLowerCase().includes(searchedBook.toLowerCase())
+    );
+};

@@ -30,20 +30,35 @@ function verifyTokenAndOrderOwner(req, res, next) {
     })
 }
 
+function verifyOrderConfirmation(req, res, next) {
+    verifyToken(req, res, async () => {
+        const order = await Order.findById(req.params.id)
+        if (!order) {
+            return res.status(403).json({ message: "Not Found" })
+        }
+
+        if (req.user.id === order.user.toString()) {
+            next()
+        }
+        else {
+            return res.status(403).json({ message: "You are not allowed" })
+        }
+    })
+}
+
 
 function verifyOrderDetails(req, res, next) {
     verifyToken(req, res, async () => {
-
         const order = await Order.findById(req.params.id)
         if (!order) {
-            res.status(403).json({ message: "Not Found" })
+            return res.status(403).json({ message: "Not Found" })
         }
 
         if (req.user.id === order.user.toString() || req.user.isAdmin) {
             next()
         }
         else {
-            res.status(403).json({ message: "You are not allowed" })
+            return res.status(403).json({ message: "You are not allowed" })
         }
     })
 }
@@ -79,5 +94,6 @@ module.exports = {
     verifyTokenAndUser,
     verifyTokenAndAdmin,
     verifyTokenAndOrderOwner,
-    verifyOrderDetails
+    verifyOrderDetails,
+    verifyOrderConfirmation
 }

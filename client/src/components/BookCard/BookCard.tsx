@@ -30,7 +30,7 @@ function BookCard({ book }: BookInfoProps) {
         },
         refetchOnWindowFocus: false,
     });
-    
+
     const bookToOrder: OrderedBooks = {
         book: book._id,
         title: book.title,
@@ -41,24 +41,24 @@ function BookCard({ book }: BookInfoProps) {
 
     const quantityInCart = getItemQuantity(bookToOrder);
     return (
-        <div className="w-80 bg-[#f5f5dc] border border-[#3e2723] rounded-lg shadow-md hover:shadow-lg transition">
+        <div className="w-95 bg-white/5 backdrop-blur text-white rounded-lg">
             <img src={book.image} className="rounded-t-lg w-full h-100" />
             <div className="p-5">
-                <h5 className="mb-2 text-2xl font-bold tracking-tight text-[#3e2723]">
+                <h5 className="mb-2 text-2xl font-bold tracking-tight ">
                     {book.title}
                 </h5>
-                <p className="text-[#a47148] font-semibold">Description</p>
-                <p className="mb-2 font-normal text-[#4e342e]">{book.description}</p>
+                <p className=" font-semibold">Description</p>
+                <p className="mb-2 font-normal ">{book.description}</p>
                 <div className="flex justify-between items-center">
-                    <p className="mb-1 font-medium text-[#3e2723] italic">
+                    <p className="mb-1 font-medium italic">
                         by {data?.fullName}
                     </p>
-                    <p className="mb-1 font-bold text-[#a47148]">{book.price} $</p>
+                    <p className="mb-1 font-bold ">{book.price} $</p>
                 </div>
                 <p>Available: {book.quantity}</p>
                 <div className="flex gap-2 mt-2">
                     <button
-                        className="px-3 py-1 bg-green-500 text-white rounded"
+                        className="px-3 py-1 bg-[#cfb58b] text-white rounded"
                         onClick={() => incrementCartItem(bookToOrder)}
                         disabled={quantityInCart >= book.quantity}
                     >
@@ -67,7 +67,7 @@ function BookCard({ book }: BookInfoProps) {
                     <p>{quantityInCart}</p>
 
                     <button
-                        className="px-3 py-1 bg-red-500 text-white rounded"
+                        className="px-3 py-1 bg-[#cfb58b] text-white rounded"
                         onClick={() => decrementCartItem(bookToOrder)}
                     >
                         -

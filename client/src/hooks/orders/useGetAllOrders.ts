@@ -2,12 +2,12 @@ import { useQuery } from '@tanstack/react-query'
 import type { Order } from '../../types/Order'
 import { getAllOrders } from '../../services/OrdersServices'
 
-const useGetAllOrders = () => {
+const useGetAllOrders = (status: string) => {
   return useQuery<Order[]>({
-        queryKey: ["orders"],
-        queryFn: getAllOrders,
-        refetchOnWindowFocus: false
-    })
+    queryKey: ["orders", status],
+    queryFn: () => getAllOrders(status),
+    refetchOnWindowFocus: false
+  })
 }
 
 export default useGetAllOrders

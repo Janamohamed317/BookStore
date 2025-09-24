@@ -8,7 +8,7 @@ export interface OrderedBooks {
 
 export interface Order {
     _id: string,
-    orderNumber: number
+    orderNumber: string
     books: OrderedBooks[],
     subTotal: number,
     status: string,

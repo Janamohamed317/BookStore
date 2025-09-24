@@ -18,7 +18,7 @@ function DisplayBooks() {
 
 
     return (
-        <>
+        <div className="h-auto">
             <h2 className="text-center font-bold text-[#f5f5dc] text-4xl">Our Books</h2>
             <div className="mt-5 flex gap-3 justify-center flex-wrap">
                 {data?.map((book) => (
@@ -27,14 +27,14 @@ function DisplayBooks() {
                     </div>
                 ))}
             </div>
-            <div className="flex text-[#f5f5dc] gap-2 justify-center items-center mt-5">
+            <div className="flex text-[#f5f5dc] gap-2 justify-center items-center h-30">
                 {pages.map((page) => (
-                    <div key={page.id} className="border-2 py-2 px-3 cursor-pointer" onClick={() => setPageNumber(page.page)}>
+                    <div key={page.id} className="border-2 py-2 px-3 cursor-pointer hover:bg-[#cfb58b]" onClick={() => setPageNumber(page.page)}>
                         {page.page}
                     </div>
                 ))}
             </div >
-        </>
+        </div>
     )
 }
 

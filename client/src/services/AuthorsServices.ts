@@ -15,7 +15,6 @@ export const addNewAuthor = async (authorData: NewAuthor) => {
     })
 }
 
-
 export const removeAuthor = async (id: string) => {
     await axios.delete(`http://localhost:5000/api/authors/delete/${id}`, {
         headers: {
@@ -37,3 +36,13 @@ export const updateAuthor = async (authorData: NewAuthor, author: Author) => {
     );
     return res.data;
 }
+
+export const searchForAuthor = (searchedAuthor: string, data: Author[]) => {
+    if (searchedAuthor.trim() === "") {
+        return data
+    }
+    searchedAuthor.toLowerCase()
+    return data.filter((author) => author.fullName.toLowerCase().includes(`${searchedAuthor}`))
+}
+
+

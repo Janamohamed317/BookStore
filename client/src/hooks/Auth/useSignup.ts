@@ -11,6 +11,7 @@ const useSignup = () => {
         mutationFn: signup,
         onSuccess: (data) => {
             localStorage.setItem("token", data.token);
+            localStorage.setItem("userId", data._id);
             Swal.fire({
                 icon: "success",
                 title: "Signup Successful",

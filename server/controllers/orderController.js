@@ -95,27 +95,20 @@ const deleteOrder = asyncHandler(async (req, res) => {
 
 // confirm ll order
 const confirmOrder = asyncHandler(async (req, res) => {
-    // const order = await Order.findByIdAndUpdate(
-    //     req.params.id,
-    //     {
-    //         confirmed: true,
-    //         status: "Confirmed"
-    //     },
-    //     { new: true }
-    // );
-    // if (!order) {
-    //     return res.status(404).json({ message: "Order Not Found" })
-    // }
+    const order = await Order.findByIdAndUpdate(
+        req.params.id,
+        {
+            confirmed: true,
+            status: "Confirmed"
+        },
+        { new: true }
+    );
+    if (!order) {
+        return res.status(404).json({ message: "Order Not Found" })
+    }
 
-    // for (const book of order.books) {
-    //     const orderedBook = await Book.findById(book.book)
-    //     if (orderedBook.quantity >= book.quantity) {
-    //         orderedBook.quantity -= book.quantity
-    //     }
-    // }
-    // await orderedBook.save()
 
-    // res.status(200).json({ message: "Order confirmed", order });
+    res.status(200).json({ message: "Order confirmed", order });
 })
 
 

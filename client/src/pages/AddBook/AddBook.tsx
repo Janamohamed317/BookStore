@@ -29,15 +29,15 @@ function AddBook() {
     }
 
     return (
-        <div className="flex justify-center items-center h-screen">
-            <div className="flex flex-col gap-5 w-96 bg-[#3e2723] p-6 rounded-xl shadow-md">
+        <div className="flex justify-center items-center p-3">
+            <div className="flex flex-col gap-5 w-96 bg-[#2B2118]/90 backdrop-blur-md border border-[#6C584C]/30 p-6 rounded-2xl shadow-lg">
                 <p className="font-bold text-center text-[#f5f5dc] text-lg">Add New Book</p>
 
                 <label htmlFor="bookName" className="text-[#f5f5dc]">Book Name:</label>
                 <input
                     id="bookName"
                     type="text"
-                    className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded"
+                    className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded focus:ring-2 focus:ring-[#a47148] outline-none"
                     placeholder="Enter Book Name"
                     value={bookData.title}
                     onChange={(e) => setBookData({ ...bookData, title: e.target.value })}
@@ -47,17 +47,27 @@ function AddBook() {
                 <input
                     id="bookDescription"
                     type="text"
-                    className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded"
+                    className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded focus:ring-2 focus:ring-[#a47148] outline-none"
                     placeholder="Enter Book Description"
                     value={bookData.description}
                     onChange={(e) => setBookData({ ...bookData, description: e.target.value })}
+                />
+
+                <label htmlFor="bookQuantity" className="text-[#f5f5dc]">Book Quantity:</label>
+                <input
+                    id="bookQuantity"
+                    type="number"
+                    className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded focus:ring-2 focus:ring-[#a47148] outline-none"
+                    placeholder="Enter Book Quantity"
+                    value={bookData.quantity}
+                    onChange={(e) => setBookData({ ...bookData, quantity: Number(e.target.value) })}
                 />
 
                 <label htmlFor="bookPrice" className="text-[#f5f5dc]">Book Price:</label>
                 <input
                     id="bookPrice"
                     type="number"
-                    className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded"
+                    className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded focus:ring-2 focus:ring-[#a47148] outline-none"
                     placeholder="Enter Book Price"
                     value={bookData.price}
                     onChange={(e) => setBookData({ ...bookData, price: Number(e.target.value) })}
@@ -89,7 +99,7 @@ function AddBook() {
                 <label htmlFor="authors" className="text-[#f5f5dc]">Author Name:</label>
                 <select
                     id="authors"
-                    className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded"
+                    className="bg-[#f5f5dc] text-[#3e2723] p-2 rounded focus:ring-2 focus:ring-[#a47148] outline-none"
                     onChange={(e) => AssignAuthorIdToAddedBook(e.target.value)}
                 >
                     <option value="">--Choose an author--</option>
@@ -112,7 +122,7 @@ function AddBook() {
 
                 <button
                     onClick={() => addBook.mutate()}
-                    className="bg-[#a47148] text-[#f5f5dc] p-2 rounded hover:bg-[#8b5e3c] transition"
+                    className="bg-[#a47148] hover:bg-[#8b5e3c] text-[#f5f5dc] p-2 rounded-lg font-semibold transition cursor-pointer"
                 >
                     Add Book
                 </button>

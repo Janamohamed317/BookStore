@@ -6,13 +6,14 @@ import type { Author, NewAuthor } from "../../types/Author";
 import type { NewBook } from "../../types/Book";
 
 type AppContextType = {
-    authors: Author[] | undefined;
+    authors: Author[] ;
     bookData: NewBook;
     setBookData: React.Dispatch<React.SetStateAction<NewBook>>;
     setAuthorData: React.Dispatch<React.SetStateAction<NewAuthor>>;
     authorData: NewAuthor;
     AssignAuthorIdToAddedBook: (firstName: string) => void;
-    getAuthors: () => void
+    getAuthors: () => void,
+
 };
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -20,6 +21,7 @@ export const AppContext = createContext<AppContextType | undefined>(undefined);
 type AppContextProviderProps = {
     children: ReactNode;
 };
+
 
 const AppContextProvider = ({ children }: AppContextProviderProps) => {
     const [bookData, setBookData] = useState<NewBook>({
@@ -39,17 +41,18 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
 
     const {
-        data: authors, refetch: getAuthors
+        data: authors = [], refetch: getAuthors
     } = useQuery<Author[]>({
         queryKey: ["authors"],
         queryFn: async () => {
             const res = await axios.get("http://localhost:5000/api/authors");
             return res.data;
         },
+        refetchOnWindowFocus: false
 
     });
 
-    
+
     const AssignAuthorIdToAddedBook = async (firstName: string) => {
         try {
             const res = await axios.get(
