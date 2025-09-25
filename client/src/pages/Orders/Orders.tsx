@@ -4,6 +4,7 @@ import { searchForOrder } from "../../services/OrdersServices"
 import { useState } from "react"
 import Search from "../../components/Search/Search"
 import { orderStatus } from "../../assets/assets"
+import useDeleteOrder from "../../hooks/orders/useDeleteOrder"
 
 const Orders = () => {
 
@@ -11,7 +12,7 @@ const Orders = () => {
     const [filterOption, setFilterOption] = useState("")
 
     const { data } = useGetAllOrders(filterOption)
-
+    const deleteOrder = useDeleteOrder()
     const FilteredData = searchForOrder(searchedItem, data!)
 
     const navigate = useNavigate()
@@ -61,6 +62,16 @@ const Orders = () => {
                                     onClick={() => navigate(`/user/orders/${order._id}`)}
                                 >
                                     View
+                                </button>
+                                <button
+                                    className="px-3 py-1 bg-[#D4A373] hover:bg-[#E5B185] text-[#2B2118] font-semibold rounded-lg cursor-pointer"
+                                    onClick={() => {
+                                        deleteOrder.mutate(order._id);
+                                        console.log(order._id);
+
+                                    }}
+                                >
+                                    Delete
                                 </button>
                             </td>
                         </tr>

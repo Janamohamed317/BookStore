@@ -42,12 +42,6 @@ const orderSchema = new mongoose.Schema(
             required: true,
             ref: "User"
         },
-        confirmed:
-        {
-            type: Boolean,
-            required: true,
-            default: false
-        },
         subTotal: {
             type: Number,
             min: 30,
@@ -59,10 +53,23 @@ const orderSchema = new mongoose.Schema(
         },
         orderNumber: {
             type: String,
-            unique: true, 
+            unique: true,
             required: true,
-            default: () => "ORD-" + nanoid(10), 
+            default: () => "ORD-" + nanoid(10),
         },
+        address: {
+            type: String,
+            required: true,
+        },
+        phone: {
+            type: String,
+            required: true,
+        },
+        notes:
+        {
+            type: String,
+            default: ""
+        }
     },
     { timestamps: true }
 
@@ -86,10 +93,9 @@ function ValidateOrderCreation(obj) {
                 .min(1)
                 .required(),
             user: Joi.string().required(),
-            confirmed: Joi.boolean(),
-            subTotal: Joi.number().min(0),
-            status: Joi.boolean()
-
+            address: Joi.string().required(),
+            phone: Joi.string().pattern(/^\d{11,}$/).required(),
+            notes: Joi.string().allow("").optional()
         }
     )
     return schema.validate(obj)

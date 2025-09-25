@@ -6,6 +6,7 @@ const OrderInfo = () => {
 
   const { data, isLoading, error } = useGetOrderInfo(orderId!);
 
+
   if (isLoading)
     return <p className="text-center text-[#f5f5dc]/80">Loading...</p>;
   if (error)
@@ -24,6 +25,10 @@ const OrderInfo = () => {
             <th className="px-4 py-2 border border-[#6C584C]/40">Price</th>
             <th className="px-4 py-2 border border-[#6C584C]/40">Quantity</th>
             <th className="px-4 py-2 border border-[#6C584C]/40">Image</th>
+            <th className="px-4 py-2 border border-[#6C584C]/40">Address</th>
+            <th className="px-4 py-2 border border-[#6C584C]/40">Phone</th>
+            <th className="px-4 py-2 border border-[#6C584C]/40">Notes</th>
+
           </tr>
         </thead>
         <tbody>
@@ -47,6 +52,15 @@ const OrderInfo = () => {
                   alt={book.title}
                   className="w-16 h-20 rounded-md mx-auto shadow-md"
                 />
+              </td>
+              <td className="px-4 py-2 border border-[#6C584C]/40">
+                {data.address}
+              </td>
+              <td className="px-4 py-2 border border-[#6C584C]/40">
+                {data.phone}
+              </td>
+              <td className="px-4 py-2 border border-[#6C584C]/40">
+                {data.notes}
               </td>
             </tr>
           ))}

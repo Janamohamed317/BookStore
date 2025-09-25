@@ -16,6 +16,8 @@ import UserProfile from './pages/UserProfile/UserProfile'
 import OrderInfo from './pages/OrderInfo/OrderInfo'
 import Cart from './pages/Cart/Cart'
 import UserEdit from './pages/UserEdit/UserEdit'
+import Checkout from './pages/Checkout/Checkout'
+import { noop } from '@tanstack/react-query'
 
 function App() {
   return (
@@ -31,7 +33,6 @@ function App() {
             <Home />
           </ProtectedRoutes>
         } />
-
 
         <Route path='/books' element={
           <ProtectedRoutes>
@@ -59,7 +60,13 @@ function App() {
 
         <Route path='/cart' element={
           <ProtectedRoutes>
-            <Cart />
+            <Cart checkout={"no"} />
+          </ProtectedRoutes>
+        } />
+
+        <Route path='/checkout' element={
+          <ProtectedRoutes>
+            <Checkout/>
           </ProtectedRoutes>
         } />
 

@@ -42,7 +42,7 @@ const makeOrder = asyncHandler(async (req, res) => {
             return res.status(400).json({ message: `Only ${orderedBook.quantity} Copies of ${orderedBook.title} are Available` })
         }
     }
-    let subTotal = 0
+    let subTotal = 30
     for (const book of req.body.books) {
         const orderedBook = await Book.findById(book.book)
         subTotal += (book.quantity * book.price)
@@ -53,6 +53,9 @@ const makeOrder = asyncHandler(async (req, res) => {
     const newOrder = new Order({
         user: req.body.user,
         books: req.body.books,
+        address: req.body.address,
+        notes: req.body.notes,
+        phone: req.body.phone,
         subTotal: subTotal
     })
 
@@ -98,7 +101,6 @@ const confirmOrder = asyncHandler(async (req, res) => {
     const order = await Order.findByIdAndUpdate(
         req.params.id,
         {
-            confirmed: true,
             status: "Confirmed"
         },
         { new: true }
@@ -112,6 +114,21 @@ const confirmOrder = asyncHandler(async (req, res) => {
 })
 
 
+const cancelOrder = asyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id)
+    if (!order) {
+        return res.status(404).json({ message: "Order Not Found" })
+    }
+    for (orderedBook of order.books) {
+        const book = await Book.findById(orderedBook.book)
+        book.quantity += orderedBook.quantity
+        await book.save()
+
+    }
+    await Order.findByIdAndDelete(req.params.id)
+    res.status(200).json({ message: "Order Canceled" });
+})
+
 module.exports =
 {
     getAllOrders,
@@ -120,4 +137,5 @@ module.exports =
     makeOrder,
     deleteOrder,
     confirmOrder,
+    cancelOrder,
 }

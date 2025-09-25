@@ -33,14 +33,15 @@ function AdminBooks() {
 
             <button
                 onClick={() => navigate("addBook")}
-                className="bg-[#a47148] hover:bg-[#8b5e3c] text-[#f5f5dc] px-5 py-2 rounded-xl self-end mt-4 transition cursor-pointer"
+                className="bg-[#D4A373] hover:bg-[#E5B185] text-[#2B2118] px-5 py-2 rounded-xl self-end mt-4 transition cursor-pointer"
             >
-                ➕ Add new book
+                Add new book
             </button>
 
             {FilteredData?.map((book) => (
                 <div
-                    className="flex justify-between gap-5 items-center mt-5 p-4 bg-white/10 backdrop-blur-md rounded-xl border border-[#6C584C]/30 hover:shadow-lg transition"
+                    className="flex justify-between gap-5 items-center mt-5 p-4 bg-[#2B2118]/50 backdrop-blur-md rounded-xl
+                     border border-[#6C584C] hover:shadow-lg cursor-pointer"
                     key={book._id}
                 >
                     <span className="text-[#f5f5dc] font-semibold text-lg">{book.title}</span>
@@ -53,13 +54,13 @@ function AdminBooks() {
                             className="cursor-pointer bg-[#7B2D26] hover:bg-[#5C1F19] text-[#f5f5dc] px-4 py-2 rounded-lg transition shadow-sm"
                             onClick={() => removeBook.mutate(book._id)}
                         >
-                            🗑 Delete
+                            Delete
                         </button>
                         <button
-                            className="cursor-pointer bg-[#D4A373] hover:bg-[#E5B185] text-[#2B2118] px-4 py-2 rounded-lg font-semibold transition shadow-sm"
+                            className="cursor-pointer bg-[#3A5A78] hover:bg-[#4F7191] text-white px-4 py-2 rounded-lg font-semibold transition shadow-sm"
                             onClick={() => NavigateToEdit(book)}
                         >
-                            ✏️ Edit
+                            Edit
                         </button>
                     </div>
                 </div>

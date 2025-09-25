@@ -30,7 +30,7 @@ function EditBook() {
     const editBook = useEditBook(bookData, file, book, setBookData);
 
     return (
-        <div className="flex justify-center items-center h-screen">
+        <div className="flex justify-center items-center h-auto p-4">
             <div className="flex flex-col gap-4 w-96 bg-[#2B2118]/90 backdrop-blur-md border border-[#6C584C]/30 p-6 rounded-2xl shadow-lg">
                 <p className="font-bold text-center text-[#f5f5dc] text-lg">
                     Edit Book
@@ -128,7 +128,7 @@ function EditBook() {
 
                 <button
                     onClick={() => editBook.mutate()}
-                    className="bg-[#a47148] hover:bg-[#8b5e3c] text-[#f5f5dc] p-2 rounded-lg font-semibold transition cursor-pointer"
+                    className="bg-[#D4A373] hover:bg-[#E5B185] text-[#2B2118] p-2 rounded-lg font-semibold transition cursor-pointer"
                 >
                     Update Book
                 </button>

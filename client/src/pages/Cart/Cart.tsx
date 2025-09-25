@@ -1,20 +1,26 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { CartContext } from "../../components/Context/CartContext";
 import { calculateTotalPrice } from "../../services/OrdersServices";
-import useMakeOrder from "../../hooks/orders/useMakeOrder";
+import { useNavigate } from "react-router";
 
-const Cart = () => {
+type cartProps =
+    {
+        checkout: string
+    }
+
+const Cart = ({ checkout }: cartProps) => {
     const context = useContext(CartContext);
     if (!context) {
         throw new Error("Cart must be used within a CartContextProvider");
     }
 
     const { cartItems, incrementCartItem, decrementCartItem, removeCartItem, clearCart } = context;
+    const navigate = useNavigate()
 
-    const grandTotal = calculateTotalPrice(cartItems)
+    const grandTotal = useMemo(() => {
+        return calculateTotalPrice(cartItems)
+    }, [cartItems])
 
-
-    const makeOrder = useMakeOrder(cartItems, clearCart)
 
     return (
         <div className="p-6 h-screen">
@@ -82,14 +88,20 @@ const Cart = () => {
                     </table>
                 </div>
             )}
-            {cartItems.length !== 0 &&
+            {cartItems.length !== 0 && checkout === "no" &&
 
-                <div className="flex justify-center mt-6">
+                <div className="flex justify-center mt-6 gap-2">
                     <button
                         className="px-6 py-3 bg-[#D4A373] hover:bg-[#E5B185] text-[#2B2118] font-semibold rounded-xl cursor-pointer"
-                        onClick={() => makeOrder.mutate()}
+                        onClick={() => navigate("/checkout")}
                     >
                         Checkout
+                    </button>
+                    <button
+                        className="px-6 py-3 bg-[#7B2D26] hover:bg-[#5C1F19] text-[#f5f5dc] font-semibold rounded-xl cursor-pointer"
+                        onClick={() => clearCart()}
+                    >
+                        Clear Cart
                     </button>
                 </div>
             }

@@ -1,15 +1,15 @@
 import { useMutation } from '@tanstack/react-query';
-import type { OrderedBooks } from '../../types/Order';
+import type { CheckOut, OrderedBooks } from '../../types/Order';
 import { newOrder } from '../../services/OrdersServices';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 
-const useMakeOrder = (cartItems: OrderedBooks[], clearCart: () => void) => {
+const useMakeOrder = (cartItems: OrderedBooks[], shippingInfo: CheckOut, clearCart: () => void) => {
     const navigate = useNavigate()
     return useMutation({
         mutationKey: ["order", cartItems],
-        mutationFn: () => newOrder(cartItems),
+        mutationFn: () => newOrder(cartItems, shippingInfo),
         onSuccess: () => {
             Swal.fire({
                 icon: "success",

@@ -58,7 +58,7 @@ function BookCard({ book }: BookInfoProps) {
                 <p>Available: {book.quantity}</p>
                 <div className="flex gap-2 mt-2">
                     <button
-                        className="px-3 py-1 bg-[#cfb58b] text-white rounded"
+                        className="px-3 py-1 bg-[#D4A373] hover:bg-[#E5B185] text-[#2B2118] rounded"
                         onClick={() => incrementCartItem(bookToOrder)}
                         disabled={quantityInCart >= book.quantity}
                     >
@@ -67,7 +67,7 @@ function BookCard({ book }: BookInfoProps) {
                     <p>{quantityInCart}</p>
 
                     <button
-                        className="px-3 py-1 bg-[#cfb58b] text-white rounded"
+                        className="px-3 py-1 bg-[#D4A373] hover:bg-[#E5B185] text-[#2B2118] rounded"
                         onClick={() => decrementCartItem(bookToOrder)}
                     >
                         -

@@ -1,8 +1,9 @@
 const express = require("express");
 const { verifyTokenAndAdmin, verifyTokenAndUser, verifyToken, verifyTokenAndOrderOwner,
-    verifyOrderDetails, verifyOrderConfirmation } = require("../middlewares/verifyToken")
+    verifyOrderDetails, verifyOrderConfirmationAndCancelation } = require("../middlewares/verifyToken")
 const { deleteOrder, getOrderByOrderId, getOrdersForUser,
-    getAllOrders, makeOrder, confirmOrder } = require("..//controllers/orderController")
+    getAllOrders, makeOrder, confirmOrder,
+    cancelOrder } = require("..//controllers/orderController")
 
 const router = express.Router();
 
@@ -16,13 +17,16 @@ router.get("/:id", verifyOrderDetails, getOrderByOrderId)
 router.get("/user/:id", verifyTokenAndOrderOwner, getOrdersForUser)
 
 // delete order
-router.delete("/remove/:id", verifyTokenAndUser, deleteOrder)
+router.delete("/remove/:id", verifyTokenAndAdmin, deleteOrder)
 
 // make an order
 router.post("/newOrder", verifyToken, makeOrder)
 
 // confirm order
-router.put("/confirmOrder/:id", verifyOrderConfirmation, confirmOrder)
+router.put("/confirmOrder/:id", verifyOrderConfirmationAndCancelation, confirmOrder)
+
+// cancel order
+router.delete("/cancel/:id", verifyOrderConfirmationAndCancelation, cancelOrder)
 
 module.exports = router
 

@@ -33,20 +33,20 @@ function GetAuthors() {
             {FilteredData?.map((author) => (
                 <div
                     key={author._id}
-                    className="flex justify-between items-center p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 shadow-md"
+                    className="flex justify-between items-center p-4 rounded-xl bg-[#2B2118]/50 backdrop-blur-md border border-white/10 shadow-md"
                 >
                     <span className="text-white font-medium">{author.fullName}</span>
 
                     <div className="flex gap-3">
                         <button
-                            className="cursor-pointer bg-red-800 hover:bg-red-900 text-white px-4 py-2 rounded-lg font-medium transition"
+                            className="cursor-pointer bg-[#7B2D26] hover:bg-[#5C1F19] text-[#f5f5dc] px-4 py-2 rounded-lg font-medium transition"
                             onClick={() => deleteAuthor.mutate(author._id)}
                         >
                             Delete
                         </button>
 
                         <button
-                            className="cursor-pointer bg-[#a47148] hover:bg-[#8b5e3c] text-white px-4 py-2 rounded-lg font-semibold transition"
+                            className="cursor-pointer bg-[#3A5A78] hover:bg-[#4F7191] text-white px-4 py-2 rounded-lg font-semibold transition"
                             onClick={() => NavigateToEditAuthor(author)}
                         >
                             Edit

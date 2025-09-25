@@ -3,7 +3,8 @@ export interface OrderedBooks {
     quantity: number,
     title: string,
     image: string,
-    price: number
+    price: number,
+
 }
 
 export interface Order {
@@ -12,5 +13,14 @@ export interface Order {
     books: OrderedBooks[],
     subTotal: number,
     status: string,
-    user: string
+    user: string,
+    address: string,
+    phone: string,
+    notes: string,
+}
+
+export interface CheckOut {
+    address: string
+    phone: string,
+    notes: string
 }

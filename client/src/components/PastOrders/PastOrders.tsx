@@ -1,11 +1,14 @@
 import { useNavigate } from "react-router";
 import useGetUserOrders from "../../hooks/orders/useGetUserOrders";
 import useConfirmOrder from "../../hooks/orders/useConfirmOrder";
+import useCancelOrder from "../../hooks/orders/useCancelOrder";
 
 const PastOrders = () => {
     const navigate = useNavigate();
     const { data, isLoading } = useGetUserOrders();
     const confirmOrder = useConfirmOrder();
+    const cancelOrder = useCancelOrder()
+
 
     if (isLoading) {
         return <p className="text-center text-[#E6D5C3]">Loading...</p>;
@@ -45,11 +48,21 @@ const PastOrders = () => {
                                 >
                                     View
                                 </button>
+
                                 <button
+                                    disabled={order.status === "Confirmed"}
                                     className="cursor-pointer px-4 py-2 rounded-xl bg-[#D4A373] hover:bg-[#E5B185] text-[#2B2118] font-semibold transition"
                                     onClick={() => confirmOrder.mutate(order._id)}
                                 >
                                     Confirm
+                                </button>
+
+                                <button
+                                    disabled={order.status === "Confirmed"}
+                                    className="cursor-pointer px-4 py-2 rounded-xl bg-[#7B2D26] hover:bg-[#5C1F19] text-[#f5f5dc] font-semibold transition"
+                                    onClick={() => cancelOrder.mutate(order._id)}
+                                >
+                                    Cancel
                                 </button>
                             </td>
                         </tr>

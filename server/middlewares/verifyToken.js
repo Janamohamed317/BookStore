@@ -30,7 +30,7 @@ function verifyTokenAndOrderOwner(req, res, next) {
     })
 }
 
-function verifyOrderConfirmation(req, res, next) {
+function verifyOrderConfirmationAndCancelation(req, res, next) {
     verifyToken(req, res, async () => {
         const order = await Order.findById(req.params.id)
         if (!order) {
@@ -77,6 +77,7 @@ function verifyTokenAndUser(req, res, next) {
     })
 }
 
+
 // verify ll admin
 function verifyTokenAndAdmin(req, res, next) {
     verifyToken(req, res, () => {
@@ -95,5 +96,5 @@ module.exports = {
     verifyTokenAndAdmin,
     verifyTokenAndOrderOwner,
     verifyOrderDetails,
-    verifyOrderConfirmation
+    verifyOrderConfirmationAndCancelation
 }

@@ -82,7 +82,7 @@ function Users() {
                                 {user.blocked ? "Unblock" : "Block"}
                             </button>
                             <button
-                                className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg cursor-pointer"
+                                className="px-3 py-1 bg-[#7B2D26] hover:bg-[#5C1F19] text-[#f5f5dc] rounded-lg cursor-pointer"
                                 onClick={() => deleteUser.mutate(user._id)}
                             >
                                 Delete

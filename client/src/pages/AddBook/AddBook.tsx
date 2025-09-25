@@ -122,7 +122,7 @@ function AddBook() {
 
                 <button
                     onClick={() => addBook.mutate()}
-                    className="bg-[#a47148] hover:bg-[#8b5e3c] text-[#f5f5dc] p-2 rounded-lg font-semibold transition cursor-pointer"
+                    className="bg-[#D4A373] hover:bg-[#E5B185] text-[#2B2118] p-2 rounded-lg font-semibold transition cursor-pointer"
                 >
                     Add Book
                 </button>

@@ -1,8 +1,31 @@
 import axios from "axios"
-import type { Order, OrderedBooks } from "../types/Order"
+import type { CheckOut, Order, OrderedBooks } from "../types/Order"
 
 
 
+export const deleteOrder = async (orderId: string) => {
+    const token = localStorage.getItem("token")
+    const res = await axios.delete(`http://localhost:5000/api/order/remove/${orderId}`,
+        {
+            headers: {
+                token: token
+            }
+        }
+    )
+    return res.data
+}
+
+export const cancelOrder = async (orderId: string) => {
+    const token = localStorage.getItem("token")
+    const res = await axios.delete(`http://localhost:5000/api/order/cancel/${orderId}`,
+        {
+            headers: {
+                token: token
+            }
+        }
+    )
+    return res.data
+}
 
 export const getUserPastOrders = async () => {
     const token = localStorage.getItem("token")
@@ -32,7 +55,6 @@ export const getAllOrders = async (orderStatus: string) => {
 
 export const getOrderInfo = async (orderId: string) => {
     const token = localStorage.getItem("token")
-
     const res = await axios.get(`http://localhost:5000/api/order/${orderId}`, {
         headers: { token }
     })
@@ -40,12 +62,15 @@ export const getOrderInfo = async (orderId: string) => {
 }
 
 
-export const newOrder = async (orderBooks: OrderedBooks[]) => {
+export const newOrder = async (orderBooks: OrderedBooks[], shippingInfo: CheckOut) => {
     const token = localStorage.getItem("token")
 
     await axios.post("http://localhost:5000/api/order/newOrder",
         {
             books: orderBooks,
+            address: shippingInfo.address,
+            phone: shippingInfo.phone,
+            notes: shippingInfo.notes,
             user: localStorage.getItem("userId")
         },
         {

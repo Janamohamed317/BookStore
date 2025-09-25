@@ -36,7 +36,7 @@ function AddAuthor() {
     }
 
     return (
-        <div className="flex justify-center items-center gap-3 mt-6 bg-white/5 backdrop-blur border border-white/10 p-4 rounded-lg shadow-md">
+        <div className="flex justify-center items-center gap-3 mt-6 bg-[#2B2118]/50 backdrop-blur-md border border-white/10 p-4 rounded-lg shadow-md">
             <p className="font-bold text-white">Add New Author</p>
 
             <input
@@ -59,9 +59,9 @@ function AddAuthor() {
 
             <button
                 onClick={() => addAuthor.mutate()}
-                className="bg-[#a47148] hover:bg-[#8b5e3c] px-4 py-2 rounded-lg text-white font-semibold transition cursor-pointer"
+                className="bg-[#D4A373] hover:bg-[#E5B185] text-[#2B2118] px-4 py-2 rounded-lg font-semibold transition cursor-pointer"
             >
-                Submit
+                Add Author
             </button>
         </div>
     );
