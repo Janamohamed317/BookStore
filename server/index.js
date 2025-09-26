@@ -27,13 +27,11 @@ app.use(helmet())
 
 // cors
 app.use(cors({
-  origin: "*", // allow requests from any domain
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+  origin: ["http://localhost:5173", "http://localhost:3000"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
 }));
 
-app.options("*", (req, res) => {
-  res.sendStatus(200);
-});
 
 // Allow frontend (5173) to use images from backend (5000)
 app.use("/images", (req, res, next) => {
