@@ -45,7 +45,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
     } = useQuery<Author[]>({
         queryKey: ["authors"],
         queryFn: async () => {
-            const res = await axios.get("http://localhost:5000/api/authors");
+            const res = await axios.get("https://book-store-git-main-jana-mohameds-projects.vercel.app/api/authors");
             return res.data;
         },
         refetchOnWindowFocus: false

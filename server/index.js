@@ -29,7 +29,6 @@ app.use(helmet())
 app.use(cors({
   origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true
 }));
 
 // Allow frontend (5173) to use images from backend (5000)
