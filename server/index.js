@@ -25,6 +25,14 @@ app.use(express.urlencoded({ extended: false }))
 // Helmet
 app.use(helmet())
 
+
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  next();
+});
+
 // cors
 app.use(cors({
   origin: "*",
@@ -33,7 +41,7 @@ app.use(cors({
 
 // Allow frontend (5173) to use images from backend (5000)
 app.use("/images", (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+  // res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173"); 
   res.setHeader("Cross-Origin-Resource-Policy", "cross-origin"); // 👈 important
   res.setHeader("Cross-Origin-Embedder-Policy", "unsafe-none");  // optional
   next();
