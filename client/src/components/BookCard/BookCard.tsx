@@ -24,7 +24,7 @@ function BookCard({ book }: BookInfoProps) {
         queryKey: ["authorName", authorId],
         queryFn: async () => {
             const res = await axios.get(
-                `http://localhost:5000/api/authors/${authorId}`
+                `https://book-store-seven-tan.vercel.app/api/authors/${authorId}`
             );
             return res.data;
         },
