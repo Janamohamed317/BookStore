@@ -2,11 +2,12 @@ import axios from "axios"
 import type { Signin, Signup, UpdatedUser, User } from "../types/User"
 import { validateData } from "../utils/SignUpValidation"
 
+const Base_URL = "https://book-store-git-main-jana-mohameds-projects.vercel.app"
 
 
 export const deleteUser = async (userId: string) => {
     const token = localStorage.getItem("token")
-    await axios.delete(`http://localhost:5000/api/users/remove/${userId}`,
+    await axios.delete(`${Base_URL}/api/users/remove/${userId}`,
         {
             headers:
             {
@@ -19,13 +20,13 @@ export const deleteUser = async (userId: string) => {
 export const blockOrUnblockUser = async (user: User) => {
     const token = localStorage.getItem("token")
     if (user.blocked) {
-        await axios.put(`http://localhost:5000/api/users/unblock/${user._id}`,
+        await axios.put(`${Base_URL}/api/users/unblock/${user._id}`,
             {},
             { headers: { token } }
         )
     }
     else {
-        await axios.put(`http://localhost:5000/api/users/block/${user._id}`,
+        await axios.put(`${Base_URL}/api/users/block/${user._id}`,
             {},
             { headers: { token } }
         )
@@ -34,7 +35,7 @@ export const blockOrUnblockUser = async (user: User) => {
 
 export const fetchUsers = async (blocked: string) => {
     const token = localStorage.getItem("token")
-    const url = blocked === " " ? "http://localhost:5000/api/users" : `http://localhost:5000/api/users?blocked=${blocked}`
+    const url = blocked === " " ? `${Base_URL}/api/users` : `${Base_URL}/api/users?blocked=${blocked}`
     const { data } = await axios.get<User[]>(url,
         {
             headers:
@@ -49,7 +50,7 @@ export const fetchUsers = async (blocked: string) => {
 export const getUserInfo = async () => {
     const token = localStorage.getItem("token")
     const userId = localStorage.getItem("userId")
-    const res = await axios.get(`http://localhost:5000/api/users/${userId}`
+    const res = await axios.get(`${Base_URL}/api/users/${userId}`
         , {
             headers: {
                 token: token
@@ -61,7 +62,7 @@ export const getUserInfo = async () => {
 export const updateUserInfo = async (updatedData: UpdatedUser) => {
     const token = localStorage.getItem("token")
     const userId = localStorage.getItem("userId")
-    return await axios.put(`http://localhost:5000/api/users/edit/${userId}`,
+    return await axios.put(`${Base_URL}/api/users/edit/${userId}`,
         updatedData,
         {
             headers:
@@ -73,7 +74,7 @@ export const updateUserInfo = async (updatedData: UpdatedUser) => {
 }
 
 export const signin = async (formData: Signin) => {
-    const res = await axios.post("http://localhost:5000/api/auth/login", {
+    const res = await axios.post(`${Base_URL}/api/auth/login`, {
         email: formData.email,
         password: formData.password,
     });
@@ -82,7 +83,7 @@ export const signin = async (formData: Signin) => {
 
 export const signup = async (formData: Signup) => {
     if (validateData(formData)) {
-        const res = await axios.post("http://localhost:5000/api/auth/register", {
+        const res = await axios.post(`${Base_URL}/api/auth/register`, {
             email: formData.email,
             username: formData.username,
             password: formData.password,
@@ -93,14 +94,14 @@ export const signup = async (formData: Signup) => {
 
 export const resetPassword = async (id: string, password: string, token: string) => {
     return await axios.post(
-        `http://localhost:5000/api/password/reset-password/${id}/${token}`,
+        `${Base_URL}/api/password/reset-password/${id}/${token}`,
         { password }
     );
 }
 
 export const verifyLink = async (id: string, setInvalid: any, token: string) => {
     try {
-        await axios.get(`http://localhost:5000/api/password/reset-password/${id}/${token}`);
+        await axios.get(`${Base_URL}/api/password/reset-password/${id}/${token}`);
     } catch {
         setInvalid(true)
         console.log(token);
@@ -110,7 +111,7 @@ export const verifyLink = async (id: string, setInvalid: any, token: string) => 
 
 export const forgetPassword = async (email: string) => {
     return await axios.post(
-        "http://localhost:5000/api/password/forgot-password",
+       `${Base_URL}}/api/password/forgot-password`,
         { email }
     );
 }

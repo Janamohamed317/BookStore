@@ -26,8 +26,11 @@ app.use(express.urlencoded({ extended: false }))
 app.use(helmet())
 
 // cors
-app.use(cors())
-
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true
+}));
 
 // Allow frontend (5173) to use images from backend (5000)
 app.use("/images", (req, res, next) => {
@@ -60,7 +63,7 @@ app.use(notFound)
 app.use(errorHandler)
 
 
-const PORT = 5000 ||process.env.PORT
+const PORT = 5000 || process.env.PORT
 
 // app.listen(PORT, () => {
 //   dbConnection();

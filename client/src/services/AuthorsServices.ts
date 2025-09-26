@@ -1,11 +1,12 @@
 import axios from "axios"
 import type { Author, NewAuthor } from "../types/Author"
 
-const token = localStorage.getItem("token")
 
+const Base_URL = "https://book-store-git-main-jana-mohameds-projects.vercel.app"
 
 export const addNewAuthor = async (authorData: NewAuthor) => {
-    await axios.post("http://localhost:5000/api/authors/add", {
+    const token = localStorage.getItem("token")
+    await axios.post(`${Base_URL}/api/authors/add`, {
         fullName: authorData.fullName,
         nationality: authorData.nationality,
     }, {
@@ -16,7 +17,9 @@ export const addNewAuthor = async (authorData: NewAuthor) => {
 }
 
 export const removeAuthor = async (id: string) => {
-    await axios.delete(`http://localhost:5000/api/authors/delete/${id}`, {
+    const token = localStorage.getItem("token")
+
+    await axios.delete(`${Base_URL}/api/authors/delete/${id}`, {
         headers: {
             token: token
         }
@@ -24,8 +27,10 @@ export const removeAuthor = async (id: string) => {
 }
 
 export const updateAuthor = async (authorData: NewAuthor, author: Author) => {
+    const token = localStorage.getItem("token")
+
     const res = await axios.put(
-        `http://localhost:5000/api/authors/edit/${author._id}`,
+        `${Base_URL}/api/authors/edit/${author._id}`,
         {
             fullName: authorData.fullName,
             nationality: authorData.nationality,

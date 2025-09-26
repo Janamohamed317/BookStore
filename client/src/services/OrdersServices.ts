@@ -2,10 +2,11 @@ import axios from "axios"
 import type { CheckOut, Order, OrderedBooks } from "../types/Order"
 
 
+const Base_URL = "https://book-store-git-main-jana-mohameds-projects.vercel.app"
 
 export const deleteOrder = async (orderId: string) => {
     const token = localStorage.getItem("token")
-    const res = await axios.delete(`http://localhost:5000/api/order/remove/${orderId}`,
+    const res = await axios.delete(`${Base_URL}/api/order/remove/${orderId}`,
         {
             headers: {
                 token: token
@@ -17,7 +18,7 @@ export const deleteOrder = async (orderId: string) => {
 
 export const cancelOrder = async (orderId: string) => {
     const token = localStorage.getItem("token")
-    const res = await axios.delete(`http://localhost:5000/api/order/cancel/${orderId}`,
+    const res = await axios.delete(`${Base_URL}/api/order/cancel/${orderId}`,
         {
             headers: {
                 token: token
@@ -30,7 +31,7 @@ export const cancelOrder = async (orderId: string) => {
 export const getUserPastOrders = async () => {
     const token = localStorage.getItem("token")
     const userId = localStorage.getItem("userId")
-    const res = await axios.get(`http://localhost:5000/api/order/user/${userId}`,
+    const res = await axios.get(`${Base_URL}/api/order/user/${userId}`,
         {
             headers: {
                 token: token
@@ -44,7 +45,7 @@ export const getUserPastOrders = async () => {
 export const getAllOrders = async (orderStatus: string) => {
     const token = localStorage.getItem("token")
 
-    const url = orderStatus === " " ? "http://localhost:5000/api/order" : `http://localhost:5000/api/order?orderStatus=${orderStatus}`
+    const url = orderStatus === " " ? `${Base_URL}/api/order` : `${Base_URL}/api/order?orderStatus=${orderStatus}`
     const res = await axios.get(url, {
         headers: {
             token: token
@@ -55,7 +56,7 @@ export const getAllOrders = async (orderStatus: string) => {
 
 export const getOrderInfo = async (orderId: string) => {
     const token = localStorage.getItem("token")
-    const res = await axios.get(`http://localhost:5000/api/order/${orderId}`, {
+    const res = await axios.get(`${Base_URL}/api/order/${orderId}`, {
         headers: { token }
     })
     return res.data
@@ -65,7 +66,7 @@ export const getOrderInfo = async (orderId: string) => {
 export const newOrder = async (orderBooks: OrderedBooks[], shippingInfo: CheckOut) => {
     const token = localStorage.getItem("token")
 
-    await axios.post("http://localhost:5000/api/order/newOrder",
+    await axios.post(`${Base_URL}/api/order/newOrder`,
         {
             books: orderBooks,
             address: shippingInfo.address,
@@ -98,7 +99,7 @@ export const searchForOrder = (searchedOrder: string, data?: Order[]) => {
 export const confirmOrder = async (orderId: string) => {
     const token = localStorage.getItem("token")
 
-    const res = await axios.put(`http://localhost:5000/api/order/confirmOrder/${orderId}`,
+    const res = await axios.put(`${Base_URL}/api/order/confirmOrder/${orderId}`,
         {},
         {
             headers: {
