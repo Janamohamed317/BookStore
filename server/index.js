@@ -60,12 +60,10 @@ app.use(notFound)
 app.use(errorHandler)
 
 
-// const PORT = 5000 ||process.env.PORT
+const PORT = 5000 ||process.env.PORT
 
-// app.listen(PORT, () => {
-//   dbConnection();
-//   console.log(`Server is running on port ${PORT}`);
-// });
+app.listen(PORT, () => {
+  dbConnection();
+  console.log(`Server is running on port ${PORT}`);
+});
 
-dbConnection(); 
-module.exports = app;
