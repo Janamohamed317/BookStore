@@ -84,7 +84,8 @@ const editBook = asyncHandler(
                 description: req.body.description,
                 cover: req.body.cover,
                 price: req.body.price,
-                image: req.body.image
+                image: req.body.image,
+                quantity: req.body.quantity
             }
         }, { new: true })
 

@@ -5,16 +5,16 @@ const path = require("path");
 const { Author } = require("../models/Author");
 const { Book } = require("../models/Book");
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, "../images"));
-    },
-    filename: function (req, file, cb) {
-        const safeName = file.originalname.replace(/\s+/g, "_");
-        cb(null, new Date().toISOString().replace(/:/g, "-") + "-" + safeName);
+    const storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, path.join(__dirname, "../images"));
+        },
+        filename: function (req, file, cb) {
+            const safeName = file.originalname.replace(/\s+/g, "_");
+            cb(null, new Date().toISOString().replace(/:/g, "-") + "-" + safeName);
 
-    },
-});
+        },
+    });
 
 const upload = multer({ storage });
 

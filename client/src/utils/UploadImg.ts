@@ -7,7 +7,7 @@ export async function UploadImg(book: Book, file: File | null) {
         formData.append("image", file);
 
         await axios.post(
-            `http://localhost:5000/api/upload/bookImg/${book._id}`,
+            `https://book-store-seven-tan.vercel.app/api/upload/bookImg/${book._id}`,
             formData,
             {
                 headers: {
