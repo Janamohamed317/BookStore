@@ -28,7 +28,7 @@ router.post("/bookImg/:id", upload.single("image"), async (req, res) => {
         }
 
         if (req.file) {
-            book.image = `http://localhost:5000/images/${req.file.filename}`;
+            book.image = `https://book-store-seven-tan.vercel.app/${req.file.filename}`;
             await book.save();
         }
 

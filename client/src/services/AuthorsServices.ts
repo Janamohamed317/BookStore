@@ -2,7 +2,7 @@ import axios from "axios"
 import type { Author, NewAuthor } from "../types/Author"
 
 
-const Base_URL = "https://book-store-git-main-jana-mohameds-projects.vercel.app"
+const Base_URL = "https://book-store-seven-tan.vercel.app"
 
 export const addNewAuthor = async (authorData: NewAuthor) => {
     const token = localStorage.getItem("token")

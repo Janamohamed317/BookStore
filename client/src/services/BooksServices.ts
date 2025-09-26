@@ -3,7 +3,7 @@ import type { Book, NewBook } from "../types/Book";
 import { UploadImg } from "../utils/UploadImg";
 
 
-const Base_URL = "https://book-store-git-main-jana-mohameds-projects.vercel.app"
+const Base_URL = "https://book-store-seven-tan.vercel.app"
 
 export const getAllBooks = async () => {
     const res = await axios.get(`${Base_URL}/api/books`);

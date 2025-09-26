@@ -2,7 +2,7 @@ import axios from "axios"
 import type { Signin, Signup, UpdatedUser, User } from "../types/User"
 import { validateData } from "../utils/SignUpValidation"
 
-const Base_URL = "https://book-store-git-main-jana-mohameds-projects.vercel.app"
+const Base_URL = "https://book-store-seven-tan.vercel.app"
 
 
 export const deleteUser = async (userId: string) => {

@@ -2,7 +2,7 @@ import axios from "axios"
 import type { CheckOut, Order, OrderedBooks } from "../types/Order"
 
 
-const Base_URL = "https://book-store-git-main-jana-mohameds-projects.vercel.app"
+const Base_URL = "https://book-store-seven-tan.vercel.app"
 
 export const deleteOrder = async (orderId: string) => {
     const token = localStorage.getItem("token")
