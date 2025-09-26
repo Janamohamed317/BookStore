@@ -10,8 +10,7 @@ const signUp = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: error.details[0].message })
     }
     let user = await User.findOne({ email: req.body.email })
-    if(!user)
-    {
+    if (!user) {
 
         user = await User.findOne({ username: req.body.username })
     }
@@ -37,19 +36,28 @@ const signUp = asyncHandler(async (req, res) => {
 })
 
 const signIn = asyncHandler(async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
+
     const { error } = ValidateUserLogin(req.body)
     if (error) {
         return res.status(400).json({ message: error.details[0].message })
     }
 
     let user = await User.findOne({ email: req.body.email })
-    
+
     if (!user) {
         return res.status(404).json({ message: "Invalid Email or Password" })
     }
 
     const isPasswordMatch = await bcrypt.compare(req.body.password, user.password)
-    
+
     if (!isPasswordMatch) {
         return res.status(404).json({ message: "Invalid Email or Password" })
     }
